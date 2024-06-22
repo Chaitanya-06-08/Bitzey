@@ -2,9 +2,10 @@ import React from "react";
 import { getState } from "../util/getState";
 import { useDispatch } from "react-redux";
 import { cartActions } from "../store/Cart";
-const CartItem = ({ item,getCart }) => {
-  const cart=getState('cart')
-  const dispatch=useDispatch()
+import { MdDelete } from "react-icons/md";
+const CartItem = ({ item}) => {
+  const cart = getState("cart");
+  const dispatch = useDispatch();
   const checkIfItemIsPresent = (item) => {
     if (!cart || cart?.items.length == 0) return -1;
     let index = cart.items.findIndex(
@@ -19,7 +20,7 @@ const CartItem = ({ item,getCart }) => {
     return cart.items[index].quantity;
   };
   return (
-    <div className="rounded-xl border-2 border-gray-400 w-full flex justify-between space-x-2 bg-brand-primary text-white transition-all p-2">
+    <div className="rounded-xl border-2 border-gray-400 w-full flex justify-between space-x-2 bg-brand-primary text-white transition-all p-4">
       <div className="w-48 h-36 rounded-xl">
         <img
           src={item.imageUrl}
@@ -37,23 +38,33 @@ const CartItem = ({ item,getCart }) => {
       <div className="flex flex-col items-center justify-center">
         <div className="bg-brand-third rounded-xl text-brand-primary flex text-lg font-bold border-brand-shade border-2 w-28">
           <button
-            className="text-xl w-1/3 hover:bg-background-shade hover:rounded-l-xl"
+            className="text-xl w-1/3 hover:bg-background-shade hover:rounded-l-xl focus:outline-none"
             onClick={() => {
-              dispatch(cartActions.removeFromCart(item))
+              dispatch(cartActions.reduceQuantity(item));
             }}
           >
             -
           </button>
           <span className="w-1/3 text-center">{getQuantity(item)}</span>
           <button
-            className="text-xl w-1/3 hover:bg-background-shade hover:rounded-r-xl"
+            className="text-xl w-1/3 hover:bg-background-shade hover:rounded-r-xl focus:outline-none"
             onClick={() => {
-              dispatch(cartActions.addToCart(item))
+              dispatch(cartActions.addToCart(item));
             }}
           >
             +
           </button>
         </div>
+      </div>
+      <div className="flex flex-col items-center justify-center">
+        <button
+          className="btn-primary"
+          onClick={() => {
+            dispatch(cartActions.deleteFromCart(item));
+          }}
+        >
+          <MdDelete />
+        </button>
       </div>
     </div>
   );

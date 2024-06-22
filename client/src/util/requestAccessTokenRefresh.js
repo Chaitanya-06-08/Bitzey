@@ -23,9 +23,18 @@ const requestAccessTokenRefresh = async (
     // console.log(response.data);
     dispatch(userActions.setAccessToken(response.data.accessToken));
     dispatch(userActions.setRefreshToken(response.data.refreshToken));
-    let { username, email, imageUrl, usertype } = response.data?.user;
+    let {
+      _id,
+      username,
+      email,
+      imageUrl,
+      usertype,
+      favouriteRestaurants,
+      favouriteFoodItems,
+    } = response.data?.user;
     dispatch(
       userActions.setUser({
+        _id,
         username,
         email,
         imageUrl,
@@ -33,8 +42,10 @@ const requestAccessTokenRefresh = async (
         isLoggedIn: true,
       })
     );
+    dispatch(userActions.setFavouriteFooditems(favouriteFoodItems));
+    dispatch(userActions.setFavouriteRestaurants(favouriteRestaurants));
     if (usertype == "restaurant") {
-      // console.log(response.data.restaurant);  
+      // console.log(response.data.restaurant);
       let { _id, user_id, name, imageUrl, location } =
         response.data?.restaurant;
       dispatch(

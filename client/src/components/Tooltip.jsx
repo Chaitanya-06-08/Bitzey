@@ -1,5 +1,5 @@
 import React from "react";
-
+// import { useState } from "react";
 const Tooltip = ({ tooltip, pos,className, children }) => {
   return (
     <div className={`${className} group relative flex`}>
@@ -10,5 +10,27 @@ const Tooltip = ({ tooltip, pos,className, children }) => {
     </div>
   );
 };
+// const Tooltip = ({ tooltip,pos,className,children }) => {
+//   const [visible, setVisible] = useState(false);
 
+//   const showTooltip = () => setVisible(true);
+//   const hideTooltip = () => setVisible(false);
+
+//   return (
+//     <div className="relative">
+//       <div 
+//         className={`z-10 ${className} `}
+//         onMouseEnter={showTooltip}
+//         onMouseLeave={hideTooltip}
+//       >
+//         {children}
+//       </div>
+//       {visible && (
+//         <div className={`absolute top-1/2 -right-1/2  mb-2 w-max px-2 py-1 bg-brand-third text-brand-primary text-sm rounded-md shadow-lg`}>
+//           {tooltip}
+//         </div>
+//       )}
+//     </div>
+//   );
+// };
 export default Tooltip;

@@ -43,12 +43,15 @@ module.exports.customerLogin = async (req, res) => {
     res.cookie("refreshToken", refreshToken, options);
     res.status(200).json({
       message: "Logged in successfully",
+      _id:user._id,
       username: user.username,
       email: user.email,
       imageUrl: user.avatar,
       accessToken,
       refreshToken,
       usertype,
+      favoriteRestaurants:user.favoriteRestaurants,
+      favoriteFoodItems:user.favoriteFoodItems
     });
   } catch (err) {
     console.log(err);

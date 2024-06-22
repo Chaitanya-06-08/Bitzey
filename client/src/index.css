@@ -9,4 +9,7 @@
     .btn-secondary{
         @apply rounded-3xl border-2 border-brand-third py-2 px-6 active:scale-75 transition-all text-brand-third focus:ring focus:ring-red-300 focus:outline-none hover:text-background-shade  hover:border-background-shade
     }
+    .btn-addToCart{
+        @apply font-bold bg-green-500 text-white rounded-3xl py-2 px-6 active:scale-75 transition-all focus:ring focus:ring-green-300 focus:ring-offset-1 focus:outline-none hover:ring hover:ring-green-300
+    }
 }

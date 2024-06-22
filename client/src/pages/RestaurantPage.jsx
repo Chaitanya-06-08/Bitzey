@@ -3,7 +3,13 @@ import { MdLocationOn } from "react-icons/md";
 import { NavLink, Outlet, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { loadingActions } from "../store/Loading";
-import { IoBookmarksOutline } from "react-icons/io5";
+import {
+  markRestaurantAsfavourite,
+  removeRestaurantFromFavourite,
+} from "../util/requestToModifyFavourites";
+
+import { IoHeartOutline } from "react-icons/io5";
+import { IoHeart } from "react-icons/io5";
 import { FaStar } from "react-icons/fa";
 import { MdShare } from "react-icons/md";
 import toast from "react-hot-toast";
@@ -16,6 +22,7 @@ const RestaurantPage = () => {
   const dispatch = useDispatch();
   const showLoading = getState("loading");
   const showSidebar = getState("sidebar");
+  const user = getState("user");
   let { _id } = useParams();
   useEffect(() => {
     const getRestaurant = async () => {
@@ -26,24 +33,12 @@ const RestaurantPage = () => {
         let opentime_edit = new Date(restaurant.opentime);
         let closetime_edit = new Date(restaurant.closetime);
         restaurant.opentime = {
-          openhour:
-            opentime_edit.getHours() < 10
-              ? `0${opentime_edit.getHours()}`
-              : `${opentime_edit.getHours()}`,
-          openminute:
-            opentime_edit.getMinutes() < 10
-              ? `0${opentime_edit.getMinutes()}`
-              : `${opentime_edit.getMinutes()}`,
+          openhour: opentime_edit.getHours().toString().padStart(2, "0"),
+          openminute: opentime_edit.getMinutes().toString().padStart(2, "0"),
         };
         restaurant.closetime = {
-          closehour:
-            closetime_edit.getHours() < 10
-              ? `0${closetime_edit.getHours()}`
-              : `${closetime_edit.getHours()}`,
-          closeminute:
-            closetime_edit.getMinutes() < 10
-              ? `0${closetime_edit.getMinutes()}`
-              : `${closetime_edit.getMinutes()}`,
+          closehour: closetime_edit.getHours().toString().padStart(2, "0"),
+          closeminute: closetime_edit.getMinutes().toString().padStart(2, "0"),
         };
         if (new Date() >= opentime_edit && new Date() <= closetime_edit)
           restaurant["isOpen"] = true;
@@ -57,6 +52,11 @@ const RestaurantPage = () => {
     getRestaurant();
     dispatch(loadingActions.toggleLoading());
   }, []);
+
+  const isFavourite = (_id) => {
+    return user?.favouriteRestaurants?.includes(_id);
+  };
+
   return (
     <>
       {showLoading && <Loader />}
@@ -65,8 +65,8 @@ const RestaurantPage = () => {
           <Hamburger />
           <div
             className={`${
-              !showSidebar ? "mx-auto max-w-[83.3333333%]" : ""
-            } flex flex-col font-brandFont px-4 py-6 space-y-3`}
+              !showSidebar ? "max-w-[83.3333333%]" : ""
+            } flex flex-col font-brandFont px-4 py-6 space-y-3 mx-auto max-w-[90%]`}
           >
             <div className="flex space-x-20 h-2/3 px-6 py-10 border-2 border-gray-300 shadow-lg rounded-2xl">
               <div className="w-[28rem] h-full ml-2">
@@ -119,9 +119,29 @@ const RestaurantPage = () => {
                   </span>
                 </p>
                 <div className="flex space-x-2 text-lg font-semibold">
-                  <button className="btn-primary flex items-center">
-                    <IoBookmarksOutline className="font-bold text-3xl" />
-                    Bookmark
+                  <button className="btn-primary flex items-center group relative text-sm">
+                    {!isFavourite(_id) && (
+                      <span
+                        className="flex items-center"
+                        onClick={() => {
+                          markRestaurantAsfavourite(_id, dispatch, user);
+                        }}
+                      >
+                        <IoHeartOutline className="text-3xl" />
+                        <p>Mark As Favourite</p>
+                      </span>
+                    )}
+                    {isFavourite(_id) && (
+                      <span
+                        className="flex items-center"
+                        onClick={() => {
+                          removeRestaurantFromFavourite(_id, dispatch, user);
+                        }}
+                      >
+                        <IoHeart className="text-3xl" />
+                        <p>Remove From Favourites</p>
+                      </span>
+                    )}
                   </button>
                   <button className="btn-primary flex items-center">
                     <MdShare className="font-bold text-3xl" />

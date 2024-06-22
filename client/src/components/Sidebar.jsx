@@ -214,7 +214,7 @@ const Sidebar = () => {
                   </Tooltip>
                 </NavLink>
                 <NavLink
-                  to="#"
+                  to="orders"
                   className={`${
                     user.isLoggedIn ? "cursor-pointer" : "cursor-not-allowed"
                   }`}
@@ -229,7 +229,7 @@ const Sidebar = () => {
                   </Tooltip>
                 </NavLink>
                 <NavLink
-                  to="#"
+                  to="favourites"
                   className={`${
                     user.isLoggedIn ? "cursor-pointer" : "cursor-not-allowed"
                   }`}

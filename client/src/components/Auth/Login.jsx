@@ -57,15 +57,19 @@ const Login = () => {
             passwordType: "password",
           });
           let {
+            _id,
             username,
             email,
             imageUrl,
             accessToken,
             refreshToken,
             usertype,
+            favouriteFoodItems,
+            favouriteRestaurants
           } = response.data;
           dispatch(
             userActions.setUser({
+              _id,
               username,
               email,
               imageUrl,
@@ -76,9 +80,12 @@ const Login = () => {
           localStorage.setItem("email", email);
           dispatch(userActions.setAccessToken(accessToken));
           dispatch(userActions.setRefreshToken(refreshToken));
+          dispatch(userActions.setFavouriteFooditems(favouriteFoodItems))
+          dispatch(userActions.setFavouriteRestaurants(favouriteRestaurants))
+
           if (loginType == "customer") {
             let backToLink = location.state?.from || "/";
-            navigate(backToLink);
+            navigate(backToLink,{replace:true});
           } else {
             let { _id, user_id, name, imageUrl, location } =
               response.data.restaurantInfo;
@@ -94,7 +101,7 @@ const Login = () => {
               })
             );
             let backToLink = location.state?.from || "/restaurant/";
-            navigate(backToLink);
+            navigate(backToLink,{replace:true});
           }
         } else {
           toast.error(response.data.message);

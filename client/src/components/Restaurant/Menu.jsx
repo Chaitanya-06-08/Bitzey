@@ -102,19 +102,19 @@ const Menu = () => {
           animate={{opacity:1,scale:1,transition:{duration:0.4}}}
           className="flex flex-col  space-y-3 border-2 border-gray-300 rounded-lg">
             <tbody>
-              <tr className="grid grid-cols-6 text-center py-3">
+              <tr className="grid grid-cols-5 text-center py-3">
                 <th>Image</th>
                 <th>Name</th>
                 <th>Category</th>
                 <th>Price</th>
-                <th>Description</th>
+                {/* <th>Description</th> */}
                 <th>Actions</th>
               </tr>
               {items.map((item) => {
                 return (
                   <tr
                     key={item._id}
-                    className="grid grid-cols-6 text-center even:bg-gray-100  rounded-lg py-2"
+                    className="grid grid-cols-5 text-center even:bg-gray-100  rounded-lg py-2"
                   >
                     <td className="rounded-lg flex justify-center">
                       <img
@@ -132,15 +132,15 @@ const Menu = () => {
                     <td className="flex items-center justify-center">
                       Rs.{item.price}
                     </td>
-                    <td className="flex items-center justify-center">
-                      {item.description}
-                    </td>
+                    {/* <td className="flex items-center justify-center">
+                      <p className="overflow-hidden text-ellipsis w-full">{item.description}</p>
+                    </td> */}
                     <td className="flex items-center justify-center space-x-2">
                       <button
                         className="btn-primary text-2xl font-bold"
                         onClick={(e) => {
                           setEditItem(item);
-                          dispatch(modalActions.toggleModal());
+                          dispatch(modalActions.toggleModal('editMenuItem'));
                         }}
                       >
                         <FaRegEdit />
@@ -161,8 +161,8 @@ const Menu = () => {
           </motion.table>
         </div>
       )}
-      {showModal && (
-        <Modal>
+      {showModal=='editMenuItem' && (
+        <Modal modalWidth="min-w-1/3">
           <EditMenuItem item={editItem} setItem={setEditItem} />
         </Modal>
       )}

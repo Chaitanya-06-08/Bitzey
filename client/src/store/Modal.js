@@ -1,10 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 export const modalSlice=createSlice({
     name:'modal',
-    initialState:false,
+    initialState:'',
     reducers:{
-        toggleModal(state){
-            return !state
+        toggleModal(state,action){
+            return action.payload
         }
     }
 })

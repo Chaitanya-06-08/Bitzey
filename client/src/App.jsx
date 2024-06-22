@@ -23,6 +23,8 @@ import Dashboard from "./components/Restaurant/Dashboard";
 import AddMenuItem from "./components/Restaurant/AddMenuItem";
 import Menu from "./components/Restaurant/Menu";
 import PersistentLogin from "./components/Auth/PersistentLogin";
+import Orders from "./components/Orders";
+import Favourites from "./pages/Favourites";
 function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
@@ -34,6 +36,8 @@ function App() {
             <Route path="menu" element={<RestaurantMenu/>}></Route>
             <Route path="reviews"></Route>
           </Route>
+          <Route path="orders" element={<Orders/>}></Route>
+          <Route path="favourites" element={<Favourites/>}></Route>
         </Route>
         <Route path="/auth/">
           <Route

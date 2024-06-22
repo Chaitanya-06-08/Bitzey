@@ -62,7 +62,7 @@ module.exports.getMenuByRestaurantId = async (req, res) => {
       },
     },
   ]);
-  console.log(menuitems);
+  // console.log(menuitems);
   res.status(200).json({
     success: true,
     message: "Restaurant page fetched successfully",

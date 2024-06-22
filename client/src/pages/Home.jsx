@@ -44,11 +44,8 @@ const Home = () => {
               Your one stop destination for decilcious food
             </h2>
             <p>
-              <a href="#" className="underline">
-                Scroll down
-              </a>{" "}
-              to choose your favourite meal from our broad selection of
-              available meals and enjoy a delicious lunch or dinner at home
+              Choose your favourite meal from our broad selection of
+              available restaurants and enjoy a delicious lunch or dinner at home
             </p>
             <NavLink to="/restaurants">
               <button className="btn-primary w-fit">Order Now</button>

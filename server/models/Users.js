@@ -23,6 +23,14 @@ const UserSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    favouriteRestaurants: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'restaurants'
+    }],
+    favouriteFoodItems: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'menuitems'
+    }],
     refreshToken: {
       type: String,
       default: "",

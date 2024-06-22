@@ -1,19 +1,6 @@
 const mongoose = require("mongoose");
+const LocationSchema = require("./Locations");
 
-const LocationSchema = new mongoose.Schema({
-  address: {
-    type: String,
-    required: true,
-  },
-  city: {
-    type: String,
-    required: true,
-  },
-  state: {
-    type: String,
-    required: true,
-  },
-});
 const RestaurantSchema = new mongoose.Schema({
   user_id: {
     type: mongoose.Schema.Types.ObjectId,
@@ -40,9 +27,11 @@ const RestaurantSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
-  cuisines: [{
-    type:String
-  }],
+  cuisines: [
+    {
+      type: String,
+    },
+  ],
   opentime: {
     type: Date,
     required: true,

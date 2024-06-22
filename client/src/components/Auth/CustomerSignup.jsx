@@ -213,7 +213,7 @@ const Signup = () => {
 
           <p className="text-white">
             Already have an account?{" "}
-            <NavLink to="/login" className="underline">
+            <NavLink to="/auth/login/customer" className="underline">
               Sign In
             </NavLink>
           </p>

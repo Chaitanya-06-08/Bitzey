@@ -31,12 +31,6 @@ const Navigation = () => {
   const cart = getState("cart");
   const cartref=useRef()
 
-  const getCartQuantity=()=>{
-    let quant= cart?.items?.reduce((totalQuantity,cartitem)=>{
-      return totalQuantity+=cartitem.quantity
-    },0)
-    return quant
-  }
   // console.log(user);
   return (
     <motion.div
@@ -79,13 +73,13 @@ const Navigation = () => {
       )}
 
       {/* Cart, dark mode */}
-      <ul className="flex space-x-4 w-1/3 justify-end px-10 h-16">
+      <ul className="flex items-center space-x-4 w-1/3 justify-end px-10 h-16">
         {user.usertype != "restaurant" && (
-          <li className="relative flex items-center justify-center space-x-2 cursor-pointer px-5  hover:bg-brand-primary hover:text-white rounded-full transition-all"
+          <li className="relative flex items-center justify-center space-x-2 cursor-pointer h-fit p-3 hover:bg-brand-primary hover:text-white rounded-xl transition-all"
           onClick={()=>{cartref.current.showModal()}}>
             <FaCartShopping />
             <span className=" top-0 right-0 rounded-3xl text-white bg-brand-primary px-1 text-base">
-              {getCartQuantity()}
+              {cart.totalQuantity}
             </span>
           </li>
         )}

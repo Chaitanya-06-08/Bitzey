@@ -30,7 +30,8 @@ const PersistentLogin = () => {
         path=location.pathname 
         navigate(path,{replace:true});
       } else {
-        navigate('/',{replace:true});
+        let path=location?.pathname||'/'
+        navigate(path,{replace:true,state:{from :path}});
       }
     }
   }, [isLoggedIn]);

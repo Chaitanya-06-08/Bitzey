@@ -57,39 +57,38 @@ const RestaurantMenu = () => {
         <div className="flex flex-col space-y-3">
           {menu?.map((category, ind) => {
             return (
-              <>
-                <div className="flex flex-col space-y-2 w-full rounded-xl border-2 border-gray-400">
-                  <div
-                    className="p-4 font-bold text-xl flex justify-between w-full cursor-pointer"
-                    onClick={() => {
-                      categoryToggle(ind);
-                    }}
-                  >
-                    <div className="space-x-1">
-                      <span className="">{category._id}</span>
-                      <span>&#40;{category.category_count}&#41;</span>
-                    </div>
-                    <FaChevronCircleDown
-                      className={`${
-                        showCategories.includes(ind) ? " rotate-180" : ""
-                      } cursor-pointer text-3xl transition-all`}
-                    />
+              <div
+                className="flex flex-col space-y-2 w-full rounded-xl border-2 border-gray-400"
+                key={ind}
+              >
+                <div
+                  className="p-4 font-bold text-xl flex justify-between w-full cursor-pointer"
+                  onClick={() => {
+                    categoryToggle(ind);
+                  }}
+                >
+                  <div className="space-x-1">
+                    <span className="">{category._id}</span>
+                    <span>&#40;{category.category_count}&#41;</span>
                   </div>
-                  <div
+                  <FaChevronCircleDown
                     className={`${
-                      showCategories.includes(ind) ? "" : "hidden"
-                    } flex flex-col px-12 transition-all`}
-                  >
-                    {category.items.map((item) => {
-                      return (
-                        <>
-                          <RestaurantMenuItem item={item} />
-                        </>
-                      );
-                    })}
-                  </div>
+                      showCategories.includes(ind) ? " rotate-180" : ""
+                    } cursor-pointer text-3xl transition-all`}
+                  />
                 </div>
-              </>
+                <div
+                  className={`${
+                    showCategories.includes(ind) ? "" : "hidden"
+                  } flex flex-col px-12 transition-all`}
+                >
+                  {category.items.map((item, ind) => {
+                    return (
+                      <RestaurantMenuItem item={item} key={ind} />
+                    );
+                  })}
+                </div>
+              </div>
             );
           })}
         </div>

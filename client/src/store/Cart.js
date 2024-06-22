@@ -4,6 +4,7 @@ if (!initialState) {
   initialState = {
     items: [],
     totalPrice: 0,
+    totalQuantity: 0,
   };
 } else {
   initialState = JSON.parse(initialState);
@@ -23,11 +24,12 @@ export const cartSlice = createSlice({
       } else {
         cart.items[index].quantity += 1;
       }
+      cart.totalQuantity += 1;
       cart.totalPrice += item.price;
       localStorage.setItem("cart", JSON.stringify(cart));
       return cart;
     },
-    removeFromCart(state, action) {
+    reduceQuantity(state, action) {
       let item = action.payload;
       let cart = state;
       let index = cart.items.findIndex(
@@ -35,6 +37,7 @@ export const cartSlice = createSlice({
       );
       cart.items[index].quantity -= 1;
       cart.totalPrice -= item.price;
+      cart.totalQuantity -= 1;
       if (cart.items[index].quantity == 0) {
         cart.items = cart.items.filter(
           (cartitem) => cartitem.item._id != item._id
@@ -47,9 +50,24 @@ export const cartSlice = createSlice({
       let newCart = {
         items: [],
         totalPrice: 0,
+        totalQuantity: 0,
       };
-      localStorage.removeItem("cart")
+      localStorage.removeItem("cart");
       return newCart;
+    },
+    deleteFromCart(state,action) {
+      let item = action.payload;
+      let cart = state;
+      let index = cart.items.findIndex(
+        (cartitem) => cartitem.item._id == item._id
+      );
+      cart.totalPrice -= item.price * cart.items[index].quantity;
+      cart.totalQuantity -= cart.items[index].quantity;
+      cart.items = cart.items.filter(
+        (cartitem) => cartitem.item._id != item._id
+      );
+      localStorage.setItem("cart", JSON.stringify(cart));
+      return cart;
     },
   },
 });
