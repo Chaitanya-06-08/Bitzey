@@ -31,7 +31,7 @@ const AddMenuItem = () => {
     public_id: "",
     description: "",
     servesfor: 1,
-    type: "",
+    type: "veg",
   });
   const formSubmitHandler = async (e) => {
     e.preventDefault();
@@ -54,6 +54,7 @@ const AddMenuItem = () => {
         }
       })
     ) {
+      console.log(item);
       toast.error("All fields must be filled");
       return;
     }
@@ -288,7 +289,6 @@ const AddMenuItem = () => {
                     id="servesfor"
                     value={item.servesfor}
                     min={1}
-                    defaultValue={1}
                     placeholder="hr"
                     className="h-full w-24 bg-white py-2 text-brand-primary px-4 rounded-md focus:outline-none"
                     onChange={formChangeHandler}
@@ -309,6 +309,7 @@ const AddMenuItem = () => {
                       value="veg"
                       className="size-5"
                       onChange={formChangeHandler}
+                      checked
                     />
                     <span>Veg</span>
                   </div>

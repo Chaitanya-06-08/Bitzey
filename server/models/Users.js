@@ -19,18 +19,22 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    avatar: {
-      type: String,
-      default: "",
+    image: {
+      imageUrl: { type: String, default: "" },
+      public_id: { type: String, default: "" },
     },
-    favouriteRestaurants: [{
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'restaurants'
-    }],
-    favouriteFoodItems: [{
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'menuitems'
-    }],
+    favouriteRestaurants: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "restaurants",
+      },
+    ],
+    favouriteFoodItems: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "menuitems",
+      },
+    ],
     refreshToken: {
       type: String,
       default: "",

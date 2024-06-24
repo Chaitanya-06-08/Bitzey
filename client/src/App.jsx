@@ -25,6 +25,7 @@ import Menu from "./components/Restaurant/Menu";
 import PersistentLogin from "./components/Auth/PersistentLogin";
 import Orders from "./components/Orders";
 import Favourites from "./pages/Favourites";
+import RestaurantOrders from "./components/Restaurant/RestaurantOrders";
 function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
@@ -55,7 +56,8 @@ function App() {
           </Route>
         </Route>
         <Route path="/restaurant" element={<AdminLayout />}>
-          <Route index element={<Dashboard />}></Route>
+          <Route index path="dashboard" element={<Dashboard />}></Route>
+          <Route path="orders" element={<RestaurantOrders/>}></Route>
           <Route path="addmenuitem" element={<AddMenuItem />}></Route>
           <Route path="menu/" element={<Menu />}>
             <Route path="editmenuitem"></Route>

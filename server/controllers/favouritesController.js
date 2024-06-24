@@ -58,7 +58,7 @@ module.exports.markFoodItemAsFavourite = async (req, res) => {
     let user = await User.findOne({ _id: user_id });
     user.favouriteFoodItems.push(menuitem_id);
     user.save();
-    console.log(user);
+    // console.log(user);
     res.status(200).json({
       message: "Fooditem marked as Favourite successfully",
     });

@@ -48,6 +48,7 @@ const Menu = () => {
       }
     };
     getItems();
+    console.log(items);
   }, [render, restaurant.restaurant_id]);
 
   const deleteItem = async (item) => {
@@ -98,8 +99,8 @@ const Menu = () => {
             }}/>
           </div>
           <motion.table
-          initial={{opacity:0,scale:0}}
-          animate={{opacity:1,scale:1,transition:{duration:0.4}}}
+          initial={{opacity:0}}
+          animate={{opacity:1,transition:{duration:0.4}}}
           className="flex flex-col  space-y-3 border-2 border-gray-300 rounded-lg">
             <tbody>
               <tr className="grid grid-cols-5 text-center py-3">

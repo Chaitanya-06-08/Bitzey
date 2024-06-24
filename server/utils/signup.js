@@ -21,7 +21,8 @@ const signup = async ({ username, email, password, usertype }) => {
     email,
     password,
     usertype,
+    avatar: { imageUrl: "", public_id: "" },
   });
   return { success: true, user: user };
 };
-module.exports=signup
+module.exports = signup;

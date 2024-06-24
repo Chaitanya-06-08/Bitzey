@@ -1,6 +1,5 @@
 import React from "react";
 import logo from "../assets/delivery.png";
-import { CgProfile } from "react-icons/cg";
 import { GiCardboardBoxClosed } from "react-icons/gi";
 import { HiOutlineLogout } from "react-icons/hi";
 import { FaStar } from "react-icons/fa";
@@ -20,13 +19,13 @@ import toast from "react-hot-toast";
 import axios from "axios";
 import { userActions } from "../store/User";
 import requestAccessTokenRefresh from "../util/requestAccessTokenRefresh";
+import ProfileImage from "./ProfileImage";
 const Sidebar = () => {
+  let user = getState("user");
   const dispatch = useDispatch();
-  const user = getState("user");
   const location = useLocation();
   let navigate = useNavigate();
   let loginType = location.pathname.split("/")[1];
-
   const logoutHandler = async () => {
     dispatch(loadingActions.toggleLoading());
     try {
@@ -45,7 +44,7 @@ const Sidebar = () => {
           userActions.setUser({
             username: "",
             email: "",
-            imageUrl: "",
+            image: { imageUrl: "", public_id: "" },
             accessToken: "",
             refreshToken: "",
             usertype: "",
@@ -58,7 +57,7 @@ const Sidebar = () => {
       }
     } catch (error) {
       console.log(error);
-      if (error.response.status == 403) {
+      if (error.response.status == 403||error.response.status == 401) {
         await requestAccessTokenRefresh(
           user,
           location,
@@ -67,7 +66,7 @@ const Sidebar = () => {
           `/auth/login/${user.usertype}`
         );
       } else {
-        toast.error(error.message);
+        toast.error(error?.response?.data?.message || error?.message);
       }
     }
 
@@ -104,15 +103,8 @@ const Sidebar = () => {
 
         <div className="flex flex-col items-center justify-center py-10 text-white w-full">
           {/* Profile icon */}
-          <div>
-            {user.imageUrl == "" && (
-              <button>
-                <CgProfile className="size-24" />
-              </button>
-            )}
-            {user.imageUrl != "" && (
-              <img src={user.imageUrl} className="w-full h-full"></img>
-            )}
+          <div className="relative w-2/3 h-36 flex items-center justify-center rounded-full">
+            <ProfileImage />
           </div>
           {user.isLoggedIn && (
             <>
@@ -132,14 +124,21 @@ const Sidebar = () => {
           )}
 
           {/* List items */}
-          <ul className=" list-none flex flex-col my-10 text-xl w-full">
+          <ul className=" list-none flex flex-col space-y-1 my-3 text-xl w-full">
             {user.usertype == "restaurant" || loginType == "restaurant" ? (
               <>
                 <NavLink
-                  to=""
-                  className={`${
-                    user.isLoggedIn ? "cursor-pointer" : "cursor-not-allowed"
-                  }`}
+                  to="dashboard"
+                  className={({ isActive }) => {
+                    return (
+                      (isActive
+                        ? `bg-white text-brand-primary rounded-3xl `
+                        : ``) +
+                      (user.isLoggedIn
+                        ? "cursor-pointer"
+                        : "cursor-not-allowed")
+                    );
+                  }}
                 >
                   <Tooltip
                     tooltip={`${user.isLoggedIn ? "" : "Login In Continue"}`}
@@ -152,9 +151,16 @@ const Sidebar = () => {
                 </NavLink>
                 <NavLink
                   to="orders"
-                  className={`${
-                    user.isLoggedIn ? "cursor-pointer" : "cursor-not-allowed"
-                  }`}
+                  className={({ isActive }) => {
+                    return (
+                      (isActive
+                        ? `bg-white text-brand-primary rounded-3xl `
+                        : ``) +
+                      (user.isLoggedIn
+                        ? "cursor-pointer"
+                        : "cursor-not-allowed")
+                    );
+                  }}
                 >
                   <Tooltip
                     tooltip={`${user.isLoggedIn ? "" : "Login In Continue"}`}
@@ -167,9 +173,16 @@ const Sidebar = () => {
                 </NavLink>
                 <NavLink
                   to="menu"
-                  className={`${
-                    user.isLoggedIn ? "cursor-pointer" : "cursor-not-allowed"
-                  }`}
+                  className={({ isActive }) => {
+                    return (
+                      (isActive
+                        ? `bg-white text-brand-primary rounded-3xl `
+                        : ``) +
+                      (user.isLoggedIn
+                        ? "cursor-pointer"
+                        : "cursor-not-allowed")
+                    );
+                  }}
                 >
                   <Tooltip
                     tooltip={`${user.isLoggedIn ? "" : "Login In Continue"}`}
@@ -182,9 +195,16 @@ const Sidebar = () => {
                 </NavLink>
                 <NavLink
                   to="addmenuitem"
-                  className={`${
-                    user.isLoggedIn ? "cursor-pointer" : "cursor-not-allowed"
-                  }`}
+                  className={({ isActive }) => {
+                    return (
+                      (isActive
+                        ? `bg-white text-brand-primary rounded-3xl `
+                        : ``) +
+                      (user.isLoggedIn
+                        ? "cursor-pointer"
+                        : "cursor-not-allowed")
+                    );
+                  }}
                 >
                   <Tooltip
                     tooltip={`${user.isLoggedIn ? "" : "Login In Continue"}`}

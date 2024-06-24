@@ -26,7 +26,7 @@ module.exports.customerLogin = async (req, res) => {
 
     let accessToken = generateAccessToken(user._id);
     let refreshToken = generateRefreshToken(user._id);
-    let temp = await User.findByIdAndUpdate(
+    user = await User.findByIdAndUpdate(
       user._id,
       {
         $set: {
@@ -34,24 +34,18 @@ module.exports.customerLogin = async (req, res) => {
         },
       },
       { new: true }
-    );
+    )
+      .select("-password")
+      .lean(true);
     // console.log("Logged in:");
-    // console.log(temp);
-
+    // console.log(user);
+    user.accessToken = accessToken;
     const options = { httpOnly: true, secure: true };
     res.cookie("accessToken", accessToken, options);
     res.cookie("refreshToken", refreshToken, options);
     res.status(200).json({
       message: "Logged in successfully",
-      _id:user._id,
-      username: user.username,
-      email: user.email,
-      imageUrl: user.avatar,
-      accessToken,
-      refreshToken,
-      usertype,
-      favoriteRestaurants:user.favoriteRestaurants,
-      favoriteFoodItems:user.favoriteFoodItems
+      user,
     });
   } catch (err) {
     console.log(err);
@@ -78,7 +72,7 @@ module.exports.restaurantLogin = async (req, res) => {
 
     let accessToken = generateAccessToken(user._id);
     let refreshToken = generateRefreshToken(user._id);
-    let temp = await User.findByIdAndUpdate(
+    user = await User.findByIdAndUpdate(
       user._id,
       {
         $set: {
@@ -86,26 +80,23 @@ module.exports.restaurantLogin = async (req, res) => {
         },
       },
       { new: true }
-    );
+    )
+      .select("-password")
+      .lean(true);
     // console.log("Logged in:");
     // console.log(temp);
-
-    let restaurant = await Restaurant.findOne({ user_id: user._id }).populate(
-      "user_id"
-    );
+      user.accessToken=accessToken
+    let restaurant = await Restaurant.findOne({ user_id: user._id })
+      .populate("user_id")
+      .lean(true);
 
     const options = { httpOnly: true, secure: true };
     res.cookie("accessToken", accessToken, options);
     res.cookie("refreshToken", refreshToken, options);
     res.status(200).json({
       message: "Logged in successfully",
-      username: user.username,
-      email: user.email,
-      imageUrl: user.avatar,
-      accessToken,
-      refreshToken,
-      usertype,
-      restaurantInfo: restaurant._doc,
+      user:user,
+      restaurantInfo: restaurant,
     });
   } catch (err) {
     console.log(err);
@@ -168,13 +159,12 @@ module.exports.customerSignup = async (req, res) => {
 };
 
 module.exports.restaurantSignup = async (req, res) => {
-  let { user, name, imageUrl, location, cuisines, opentime, closetime } =
-    req.body;
-    console.log(cuisines);
+  let { user, name, image, location, cuisines, opentime, closetime } = req.body;
+  console.log(cuisines);
   if (
     !user ||
     !name ||
-    !imageUrl ||
+    !image ||
     !location ||
     isNaN(Date.parse(opentime)) ||
     isNaN(Date.parse(closetime))
@@ -193,7 +183,7 @@ module.exports.restaurantSignup = async (req, res) => {
     const restaurant = await Restaurant.create({
       user_id,
       name,
-      imageUrl,
+      image,
       location,
       cuisines,
       opentime,

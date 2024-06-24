@@ -6,7 +6,10 @@ export const userSlice = createSlice({
     _id: "",
     username: "",
     email: "",
-    imageUrl: "",
+    image: {
+      imageUrl:"",
+      public_id:""
+    },
     accessToken: "",
     refreshToken: "",
     usertype: "",
@@ -16,14 +19,14 @@ export const userSlice = createSlice({
   },
   reducers: {
     setUser(state, action) {
-      let { _id, username, email, imageUrl, usertype, isLoggedIn } =
+      let { _id, username, email, image, usertype, isLoggedIn } =
         action.payload;
       return {
         ...state,
         _id: _id,
         username: username,
         email: email,
-        imageUrl: imageUrl,
+        image: image,
         usertype: usertype,
         isLoggedIn: isLoggedIn,
       };
@@ -62,6 +65,17 @@ export const userSlice = createSlice({
       );
       return state
     },
+    setUserProfileImage(state,action){
+      state.image=action.payload
+      return state
+    },
+    removeUserProfileImage(state){
+      state.image={
+        imageUrl:"",
+        public_id:""
+      }
+      return state
+    }
   },
 });
 

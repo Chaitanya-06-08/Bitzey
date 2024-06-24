@@ -25,11 +25,11 @@ const Navigation = () => {
   };
 
   const navLinkClasses =
-    "hover:bg-brand-primary hover:text-white transition-all px-5";
+    "hover:bg-brand-primary hover:text-white transition-all";
 
   const user = getState("user");
   const cart = getState("cart");
-  const cartref=useRef()
+  const cartref = useRef();
 
   // console.log(user);
   return (
@@ -52,21 +52,53 @@ const Navigation = () => {
       {user.usertype != "restaurant" && (
         <ul className=" list-none flex justify-end my-4 w-2/3 ">
           <div className="bg-white border-2 border-brand-primary rounded-3xl flex divide-x-2">
-            <NavLink to="/">
-              <li className={`${navLinkClasses} hover:rounded-l-3xl`}>Home</li>
+            <NavLink
+              to="/"
+              className={({ isActive }) => {
+                return (
+                  (isActive ? `bg-brand-primary text-white ` : ``) +
+                  navLinkClasses +
+                  ` rounded-l-3xl`
+                );
+              }}
+            >
+              <li className="px-5">Home</li>
             </NavLink>
-            <NavLink to="/restaurants">
-              <li className={`${navLinkClasses}`}>Restaurants</li>
+            <NavLink
+              to="/restaurants"
+              className={({ isActive }) => {
+                return (
+                  (isActive ? `bg-brand-primary text-white ` : ``) +
+                  navLinkClasses
+                );
+              }}
+            >
+              <li className="px-5">Restaurants</li>
             </NavLink>
-            <NavLink to="/auth/partner-with-us-restaurant">
+            <NavLink
+              to="/auth/partner-with-us-restaurant"
+              className={({ isActive }) => {
+                return (
+                  (isActive ? `bg-brand-primary text-white ` : ``) +
+                  navLinkClasses 
+                );
+              }}
+            >
               <li className="hover:bg-brand-primary hover:text-white transition-all px-5 ">
                 Add your restaraunt
               </li>
             </NavLink>
-            <NavLink to="#">
-              <li className={`${navLinkClasses} hover:rounded-r-3xl`}>
-                About Us
-              </li>
+            <NavLink
+              to="aboutus"
+              className={({ isActive }) => {
+                return (
+                  (isActive ? `bg-brand-primary text-white ` : ``) +
+                  navLinkClasses +
+                  ` rounded-r-3xl`
+                );
+              }}
+            >
+              <li className="px-5">About Us</li>
             </NavLink>
           </div>
         </ul>
@@ -75,8 +107,12 @@ const Navigation = () => {
       {/* Cart, dark mode */}
       <ul className="flex items-center space-x-4 w-1/3 justify-end px-10 h-16">
         {user.usertype != "restaurant" && (
-          <li className="relative flex items-center justify-center space-x-2 cursor-pointer h-fit p-3 hover:bg-brand-primary hover:text-white rounded-xl transition-all"
-          onClick={()=>{cartref.current.showModal()}}>
+          <li
+            className="relative flex items-center justify-center space-x-2 cursor-pointer h-fit p-3 hover:bg-brand-primary hover:text-white rounded-xl transition-all"
+            onClick={() => {
+              cartref.current.showModal();
+            }}
+          >
             <FaCartShopping />
             <span className=" top-0 right-0 rounded-3xl text-white bg-brand-primary px-1 text-base">
               {cart.totalQuantity}
@@ -87,7 +123,7 @@ const Navigation = () => {
           <Darktoggle />
         </li>
       </ul>
-      <CartModal ref={cartref}/>
+      <CartModal ref={cartref} />
     </motion.div>
   );
 };

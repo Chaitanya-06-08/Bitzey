@@ -25,7 +25,7 @@ const PersistentLogin = () => {
   useEffect(() => {
     if (isLoggedIn) {
       if (user.usertype == "restaurant") {
-        let path="/restaurant"
+        let path="/restaurant/dashboard"
         if (location.pathname.split('/')[1]=='restaurant')
         path=location.pathname 
         navigate(path,{replace:true});

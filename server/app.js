@@ -21,6 +21,7 @@ const restaurantAdminRoute=require('./routes/RestaurantAdmin')
 const restaurantsRoute=require('./routes/Restaurants')
 const ordersRoute=require('./routes/Orders')
 const favouritesRoute=require('./routes/Favourites')
+const usersRoute=require('./routes/Users')
 
 app.use("/api", authRoute);
 app.use("/api", imageHandlingRoute);
@@ -28,6 +29,7 @@ app.use("/api", restaurantAdminRoute);
 app.use("/api", restaurantsRoute);
 app.use("/api", ordersRoute);
 app.use("/api", favouritesRoute);
+app.use("/api", usersRoute);
 
 mongoose
   .connect(process.env.MONGO_DB_URI, {

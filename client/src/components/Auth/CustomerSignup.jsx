@@ -12,6 +12,7 @@ import axios from "axios";
 import { loadingActions } from "../../store/Loading";
 import { useSelector, useDispatch } from "react-redux";
 import { NavLink } from "react-router-dom";
+import Navigation from "../Navigation";
 const Signup = () => {
   const [signupDetails, setSignupDetails] = useState({
     username: "",
@@ -80,6 +81,7 @@ const Signup = () => {
 
   return (
     <>
+      <Navigation/>
       <div className={`${showLoading ? "blur" : ""} flex font-brandFont`}>
         <div className="w-1/2 flex items-center justify-center h-screen">
           <img

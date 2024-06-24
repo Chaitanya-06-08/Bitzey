@@ -9,7 +9,7 @@ const Modal = ({ modalWidth, children }) => {
         className={`relative bg-brand-primary font-brandFont text-white p-5 rounded-xl shadow-lg  max-h-[35rem] overflow-y-scroll overflow-x-hidden ${modalWidth}`}
       >
         <button
-          className="absolute top-0 right-0 m-3 text-white rounded-xl font-bold"
+          className="absolute top-0 right-0 m-3 text-white rounded-xl font-bold text-xl"
           onClick={() => {
             dispatch(modalActions.toggleModal(''));
           }}

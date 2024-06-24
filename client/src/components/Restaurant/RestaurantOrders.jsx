@@ -1,22 +1,22 @@
 import React, { useEffect, useState } from "react";
-import { getState } from "../util/getState";
-import Hamburger from "./Hamburger";
+import Hamburger from "../Hamburger";
 import { useDispatch } from "react-redux";
-import { loadingActions } from "../store/Loading";
+import { loadingActions } from "../../store/Loading";
 import { FaCircle } from "react-icons/fa";
 import { BsFillTriangleFill } from "react-icons/bs";
-import requestAccessTokenRefresh from "../util/requestAccessTokenRefresh";
+import requestAccessTokenRefresh from "../../util/requestAccessTokenRefresh";
 import axios from "axios";
 import toast from "react-hot-toast";
-import Dropdown from "./Dropdown";
-import { modalActions } from "../store/Modal";
-import CancelOrder from "./CancelOrder";
-import Modal from "./Modal";
-import NoOrdersFound from "../assets/no-orders-found.png";
+import Dropdown from "../Dropdown";
+import CancelOrder from "../CancelOrder";
+import Modal from "../Modal";
+import NoOrdersFound from "../../assets/no-orders-found.png";
 import { useNavigate } from "react-router-dom";
-const Orders = () => {
+import { getState } from "../../util/getState";
+const RestaurantOrders = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const restaurant = getState("restaurant");
   const user = getState("user");
   const showSidebar = getState("sidebar");
   const [filteredOrders, setFilteredOrders] = useState([]);
@@ -25,12 +25,12 @@ const Orders = () => {
     dispatch(loadingActions.toggleLoading());
     try {
       let response = await axios.get(
-        `/api/getOrdersByCustomerId?_id=${user._id}`,
+        `/api/getOrdersByRestaurantId?_id=${restaurant.restaurant_id}`,
         {
           withCredentials: true,
         }
       );
-      console.log(response.data);
+      // console.log(response.data);
       setOriginalOrders(response.data.orders);
       setFilteredOrders(response.data.orders);
     } catch (error) {
@@ -66,7 +66,30 @@ const Orders = () => {
   };
   const cancelOrder = async (_id) => {
     try {
-      let response = await axios.post(`/api/cancelOrder`, { _id });
+      let response = await axios.post(`/api/cancelOrder?_id=${_id}`);
+      console.log(response.data);
+      await getOrders();
+    } catch (error) {
+      console.log(error);
+      if (error.response.status == 403) {
+        await requestAccessTokenRefresh(
+          user,
+          location,
+          navigate,
+          dispatch,
+          `/auth/login/${user.usertype}`
+        );
+      } else {
+        toast.error(error.message);
+      }
+    }
+  };
+  const updateOrderStatus = async (status, _id) => {
+    try {
+      let response = await axios.post(`/api/updateOrderStatus`, {
+        _id,
+        status:status.toLowerCase(),
+      });
       console.log(response.data);
       await getOrders();
     } catch (error) {
@@ -94,10 +117,11 @@ const Orders = () => {
       >
         {originalOrders.length > 0 ? (
           <OrdersLayout
-            heading="Past Orders"
+            heading="Orders"
             filteredOrders={filteredOrders}
             handleOptionClick={handleOptionClick}
             cancelOrder={cancelOrder}
+            onOrderStatusUpdate={updateOrderStatus}
           />
         ) : (
           <div className="w-full h-96 rounded-xl flex items-center">
@@ -108,16 +132,8 @@ const Orders = () => {
             />
             <div className="w-1/2 flex flex-col space-y-2 items-center">
               <h1 className=" text-xl font-semibold text-brand-primary">
-                Looks like you haven't made any orders yet...
+                No orders were made yet...
               </h1>
-              <button
-                className="btn-primary"
-                onClick={() => {
-                  navigate("/restaurants");
-                }}
-              >
-                Order Now
-              </button>
             </div>
           </div>
         )}
@@ -126,15 +142,15 @@ const Orders = () => {
   );
 };
 
-export default Orders;
+export default RestaurantOrders;
 
 const OrdersLayout = ({
   heading,
   filteredOrders,
   handleOptionClick,
   cancelOrder,
+  onOrderStatusUpdate,
 }) => {
-  const dispatch = useDispatch();
   const showModal = getState("modal");
 
   function formatTime(date) {
@@ -197,21 +213,25 @@ const OrdersLayout = ({
     <>
       <div className="flex flex-col space-y-3">
         <div className="flex items-center justify-between">
-          <h1 className="text-3xl text-brand-primary w-full border-b-2 border-b-gray-200 py-2 font-bold">
+        <h1 className="text-3xl text-brand-primary w-full border-b-2 border-b-gray-200 py-2 font-bold">
             {heading}
           </h1>
           <Dropdown
             placeholder={"Sort By"}
             options={["All", "Pending", "Delivered", "Cancelled"]}
             onOptionClicked={handleOptionClick}
+            width={"w-36"}
           />
         </div>
         {filteredOrders.length > 0 && (
           <div className="flex flex-col space-y-3">
-            {filteredOrders?.map((order) => {
+            {filteredOrders?.map((order, ind) => {
               return (
                 <>
-                  <div className="rounded-xl border-2 border-gray-300 w-full p-3 bg-white shadow-xl">
+                  <div
+                    key={ind}
+                    className="rounded-xl border-2 border-gray-300 w-full p-3 bg-white shadow-xl"
+                  >
                     <div className="flex space-x-4 ">
                       <div className="w-1/4 h-full rounded-xl">
                         <img
@@ -238,7 +258,7 @@ const OrdersLayout = ({
                           )}
                         </h2>
                         <div className="flex space-x-4 bg-gray-100 rounded-xl py-2 px-4">
-                          <div className="flex flex-col space-y-2 w-1/2">
+                          <div className="flex items-start space-x-2 w-1/2">
                             <p className="text-green-500 font-semibold">To:</p>
                             <div className="flex flex-col">
                               <p>{order.customerName}</p>
@@ -249,26 +269,16 @@ const OrdersLayout = ({
                               </p>
                             </div>
                           </div>
-                          <div className="flex flex-col space-y-2 w-1/2">
-                            <p className="text-green-500 font-semibold">
-                              Delivery From:
-                            </p>
-                            <div className="flex flex-col">
-                              <p>{order.restaurant_id.name}</p>
-                              <p>{order.restaurant_id.location.address}</p>
-                              <p>{order.restaurant_id.location.city}</p>
-                            </div>
-                          </div>
                         </div>
                       </div>
                     </div>
                     <div className="py-2 px-8 flex flex-col justify-between space-y-3">
                       <div className="flex space-x-4">
-                        <p className="text-xl font-semibold ">Your Order</p>
+                        <p className="text-xl font-semibold ">Order Details :</p>
                         <div className="flex flex-wrap items-center space-x-3">
                           {order.items.map((item, ind) => {
                             return (
-                              <p className="flex space-x-2" key={ind}>
+                              <p key={ind} className="flex space-x-2">
                                 <span>
                                   {item.item_id.type == "veg" && (
                                     <FaCircle className="text-green-500 p-1 rounded-lg border-2 border-green-500 font-bold w-fit text-2xl" />
@@ -289,18 +299,28 @@ const OrdersLayout = ({
                         Total Amount: &#8377;{order.totalPrice}
                       </p>
                       <div className="flex space-x-3">
-                        {order.deliveryStatus == "pending" && (
-                          <button
-                            className="btn-primary"
-                            onClick={() => {
-                              dispatch(modalActions.toggleModal("cancelOrder"));
-                            }}
-                          >
-                            Cancel Order
-                          </button>
-                        )}
-                        {order.deliveryStatus == "delivered" && (
-                          <button className="btn-addToCart">Reorder</button>
+                        {order.deliveryStatus != "delivered" && (
+                          <>
+                            <div className="flex items-center space-x-2">
+                              <p className="w-full font-bold text-xl">Status Of Order:</p>
+                              <Dropdown
+                                placeholder={"Order Status"}
+                                options={["Pending","Out For Delivery", "Delivered"]}
+                                width={"w-52"}
+                                currentOption={order.deliveryStatus}
+                                onOptionClicked={(status) => {
+                                  onOrderStatusUpdate(status, order._id);
+                                }}
+                              />
+                            </div>
+                            {/* <button
+                              className="btn-primary"
+                              onClick={() => {
+                              }}
+                            >
+                              Update Status
+                            </button> */}
+                          </>
                         )}
                       </div>
                     </div>

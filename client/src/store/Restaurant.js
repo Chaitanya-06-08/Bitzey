@@ -6,13 +6,16 @@ export const restaurantSlice = createSlice({
     restaurant_id: "",
     user_id: "",
     name: "",
-    imageUrl: "",
+    image: {
+      imageUrl: "",
+      public_id: "",
+    },
     location: "",
   },
   reducers: {
     setRestaurantInfo(state, action) {
-      let { restaurant_id, user_id, name, imageUrl, location } = action.payload;
-      return { restaurant_id, user_id, name, imageUrl, location };
+      let { restaurant_id, user_id, name, image, location } = action.payload;
+      return { restaurant_id, user_id, name, image, location };
     },
   },
 });

@@ -11,9 +11,9 @@ const RestaurantSchema = new mongoose.Schema({
     type: String,
     required: [true, "Restaurant Name is required"],
   },
-  imageUrl: {
-    type: String,
-    require: [true, "Restaurant Image is required"],
+  image: {
+    imageUrl: { type: String, default: "", required: true },
+    public_id: { type: String, default: "", required: true },
   },
   public_id: {
     type: String,

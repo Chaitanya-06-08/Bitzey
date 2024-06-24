@@ -9,9 +9,12 @@ import { useDispatch } from "react-redux";
 import { modalActions } from "../store/Modal";
 import ConfirmOrder from "./ConfirmOrder";
 import orderSuccess from "../assets/order-success.png";
+import ProfileImageEdit from "./ProfileImageEdit";
+import Loader from "./Loader";
 const Layout = () => {
   const showSidebar = getState("sidebar");
   const showModal = getState("modal");
+  const showLoading = getState("loading");
   const navigate = useNavigate();
   const dispatch = useDispatch();
   return (
@@ -29,6 +32,7 @@ const Layout = () => {
 
           {/* outlet */}
           <Outlet></Outlet>
+
           <Footer></Footer>
         </div>
       </div>
@@ -104,6 +108,11 @@ const Layout = () => {
               </button>
             </div>
           </div>
+        </Modal>
+      )}
+      {showModal == "profileImageEdit" && (
+        <Modal modalWidth="w-1/3 p-8">
+          <ProfileImageEdit />
         </Modal>
       )}
     </>

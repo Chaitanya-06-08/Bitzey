@@ -118,7 +118,7 @@ const Restaurants = () => {
                   </div>
                   <div className="w-2/5 h-64 scale-90 relative">
                     <img
-                      src={card.imageUrl}
+                      src={card.image.imageUrl}
                       alt="restaurant image"
                       className="rounded-2xl object-cover w-full h-full  group-hover:border-4 group-hover:border-brand-third transition-all"
                     />

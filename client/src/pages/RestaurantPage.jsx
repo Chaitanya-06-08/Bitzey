@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { MdLocationOn } from "react-icons/md";
-import { NavLink, Outlet, useParams } from "react-router-dom";
+import { NavLink, Outlet, useLocation, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { loadingActions } from "../store/Loading";
 import {
@@ -20,10 +20,14 @@ import Hamburger from "../components/Hamburger";
 const RestaurantPage = () => {
   const [restaurant, setRestaurant] = useState(null);
   const dispatch = useDispatch();
+  const location=useLocation()
   const showLoading = getState("loading");
   const showSidebar = getState("sidebar");
   const user = getState("user");
   let { _id } = useParams();
+  if(!_id){
+    _id=location.state?.restaurant_id
+  }
   useEffect(() => {
     const getRestaurant = async () => {
       try {
@@ -71,7 +75,7 @@ const RestaurantPage = () => {
             <div className="flex space-x-20 h-2/3 px-6 py-10 border-2 border-gray-300 shadow-lg rounded-2xl">
               <div className="w-[28rem] h-full ml-2">
                 <img
-                  src={restaurant?.imageUrl}
+                  src={restaurant?.image?.imageUrl}
                   alt=""
                   className="object-cover w-full h-full rounded-xl"
                 />

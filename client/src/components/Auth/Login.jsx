@@ -56,23 +56,24 @@ const Login = () => {
             showPassword: false,
             passwordType: "password",
           });
+          console.log(response.data);
           let {
             _id,
             username,
             email,
-            imageUrl,
+            image,
             accessToken,
             refreshToken,
             usertype,
             favouriteFoodItems,
             favouriteRestaurants
-          } = response.data;
+          } = response.data.user;
           dispatch(
             userActions.setUser({
               _id,
               username,
               email,
-              imageUrl,
+              image,
               usertype,
               isLoggedIn: true,
             })
@@ -87,7 +88,7 @@ const Login = () => {
             let backToLink = location.state?.from || "/";
             navigate(backToLink,{replace:true});
           } else {
-            let { _id, user_id, name, imageUrl, location } =
+            let { _id, user_id, name, image, location } =
               response.data.restaurantInfo;
             user_id = user_id._id;
             // console.log(user_id,name,imageUrl,location);
@@ -96,11 +97,11 @@ const Login = () => {
                 restaurant_id: _id,
                 user_id,
                 name,
-                imageUrl,
+                image,
                 location,
               })
             );
-            let backToLink = location.state?.from || "/restaurant/";
+            let backToLink = location.state?.from || "/restaurant/dashboard";
             navigate(backToLink,{replace:true});
           }
         } else {

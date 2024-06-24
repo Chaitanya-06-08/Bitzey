@@ -125,7 +125,10 @@ const RestaurantSignup = () => {
             usertype: "restaurant",
           },
           name: signupDetails.restaurantName,
-          imageUrl: signupDetails.restaurantImage,
+          image: {
+            imageUrl:signupDetails.restaurantImage,
+            public_id:signupDetails.public_id
+          },
           location: {
             address: signupDetails.address,
             city: signupDetails.city,
