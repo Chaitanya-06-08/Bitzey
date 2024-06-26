@@ -46,8 +46,7 @@ const requestAccessTokenRefresh = async (
     dispatch(userActions.setFavouriteRestaurants(favouriteRestaurants));
     if (usertype == "restaurant") {
       // console.log(response.data.restaurant);
-      let { _id, user_id, name, image, location } =
-        response.data?.restaurant;
+      let { _id, user_id, name, image, location } = response.data?.restaurant;
       dispatch(
         restaurantActions.setRestaurantInfo({
           restaurant_id: _id,

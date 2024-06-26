@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { MdLocationOn } from "react-icons/md";
-import { NavLink, Outlet, useLocation, useParams } from "react-router-dom";
+import {
+  NavLink,
+  Outlet,
+  useLocation,
+  useNavigate,
+  useParams,
+} from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { loadingActions } from "../store/Loading";
 import {
@@ -16,17 +22,17 @@ import toast from "react-hot-toast";
 import axios from "axios";
 import { getState } from "../util/getState";
 import Loader from "../components/Loader";
-import Hamburger from "../components/Hamburger";
 const RestaurantPage = () => {
   const [restaurant, setRestaurant] = useState(null);
   const dispatch = useDispatch();
-  const location=useLocation()
+  const location = useLocation();
   const showLoading = getState("loading");
   const showSidebar = getState("sidebar");
   const user = getState("user");
   let { _id } = useParams();
-  if(!_id){
-    _id=location.state?.restaurant_id
+  const navigate = useNavigate();
+  if (!_id) {
+    _id = location.state?.restaurant_id;
   }
   useEffect(() => {
     const getRestaurant = async () => {
@@ -66,10 +72,10 @@ const RestaurantPage = () => {
       {showLoading && <Loader />}
       {!showLoading && (
         <>
-          <Hamburger />
+          {/* <Hamburger /> */}
           <div
             className={`${
-              !showSidebar ? "max-w-[83.3333333%]" : ""
+              !showSidebar ? "max-w-[75%]" : ""
             } flex flex-col font-brandFont px-4 py-6 space-y-3 mx-auto max-w-[90%]`}
           >
             <div className="flex space-x-20 h-2/3 px-6 py-10 border-2 border-gray-300 shadow-lg rounded-2xl">
@@ -128,7 +134,12 @@ const RestaurantPage = () => {
                       <span
                         className="flex items-center"
                         onClick={() => {
-                          markRestaurantAsfavourite(_id, dispatch, user);
+                          markRestaurantAsfavourite(
+                            _id,
+                            dispatch,
+                            user,
+                            navigate
+                          );
                         }}
                       >
                         <IoHeartOutline className="text-3xl" />
@@ -139,7 +150,12 @@ const RestaurantPage = () => {
                       <span
                         className="flex items-center"
                         onClick={() => {
-                          removeRestaurantFromFavourite(_id, dispatch, user);
+                          removeRestaurantFromFavourite(
+                            _id,
+                            dispatch,
+                            user,
+                            navigate
+                          );
                         }}
                       >
                         <IoHeart className="text-3xl" />

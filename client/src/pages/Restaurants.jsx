@@ -8,7 +8,6 @@ import {
   removeRestaurantFromFavourite,
 } from "../util/requestToModifyFavourites";
 import { MdAccessTimeFilled } from "react-icons/md";
-import Hamburger from "../components/Hamburger";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import FavouriteIcon from "../components/FavouriteIcon";
@@ -22,14 +21,13 @@ const Restaurants = () => {
     const fetchRestaurants = async () => {
       let response = await axios.get("/api/fetchRestaurants");
       setRestaurants(response.data.restaurants);
-      // console.log(response.data.restaurants);
+      // console.log(response);
     };
     fetchRestaurants();
   }, []);
 
   return (
     <>
-      {!showSidebar && <Hamburger />}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{
@@ -41,13 +39,13 @@ const Restaurants = () => {
         }}
         // className="m-4 grid grid-cols-3 gap-8 font-brandFont"
         className={`${
-          showSidebar ? "" : "mx-auto max-w-[70%]"
-        } flex flex-col space-y-4 p-3 font-brandFont mx-auto max-w-[90%]`}
+          showSidebar ? "max-w-[90%]" : "max-w-[70%]"
+        } flex flex-col space-y-4 p-3 font-brandFont mx-auto `}
       >
         <h1 className="bg-white text-3xl text-brand-primary italic border-b-2 border-b-gray-300 font-semibold">
           Restaurants
         </h1>
-        {Restaurants.length > 0 &&
+        {Restaurants?.length > 0 &&
           Restaurants.map((card, ind) => {
             return (
               <div
@@ -124,10 +122,20 @@ const Restaurants = () => {
                     />
                     <FavouriteIcon
                       onAddToFavouriteClicked={(_id) => {
-                        markRestaurantAsfavourite(_id, dispatch, user);
+                        markRestaurantAsfavourite(
+                          _id,
+                          dispatch,
+                          user,
+                          navigate
+                        );
                       }}
                       onRemoveFromFavouriteClicked={(_id) => {
-                        removeRestaurantFromFavourite(_id, dispatch, user);
+                        removeRestaurantFromFavourite(
+                          _id,
+                          dispatch,
+                          user,
+                          navigate
+                        );
                       }}
                       favouriteArray={user.favouriteRestaurants}
                       _id={card._id}

@@ -12,16 +12,21 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 
 app.use(bodyParser.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: process.env.CLIENT_ORIGIN,
+    credentials: true,
+  })
+);
 app.use(cookieParser());
 //routes
 const authRoute = require("./routes/Auth");
 const imageHandlingRoute = require("./routes/ImageHandling");
-const restaurantAdminRoute=require('./routes/RestaurantAdmin')
-const restaurantsRoute=require('./routes/Restaurants')
-const ordersRoute=require('./routes/Orders')
-const favouritesRoute=require('./routes/Favourites')
-const usersRoute=require('./routes/Users')
+const restaurantAdminRoute = require("./routes/RestaurantAdmin");
+const restaurantsRoute = require("./routes/Restaurants");
+const ordersRoute = require("./routes/Orders");
+const favouritesRoute = require("./routes/Favourites");
+const usersRoute = require("./routes/Users");
 
 app.use("/api", authRoute);
 app.use("/api", imageHandlingRoute);
@@ -36,7 +41,7 @@ mongoose
     dbName: "Bitzey",
   })
   .then((res) => {
-    app.listen(3000, () => {
+    app.listen(process.env.SERVER_PORT, () => {
       console.log("server started");
     });
   })

@@ -7,9 +7,11 @@ import Hamburger from "../Hamburger";
 import Loader from "../Loader";
 import ProfileImageEdit from "../ProfileImageEdit";
 import Modal from "../Modal";
+import Footer from "../Footer";
 const Layout = () => {
   const showSidebar = getState("sidebar");
   const showModal = getState("modal");
+  const showLoading = getState("loading");
   return (
     <>
       <div className="bg-white w-full h-full flex font-brand-primaryFont">
@@ -26,11 +28,13 @@ const Layout = () => {
 
           {/* outlet */}
           <Outlet></Outlet>
+
+          {!showLoading && <Footer />}
         </div>
       </div>
       {showModal == "profileImageEdit" && (
         <Modal modalWidth="w-1/3 p-8">
-          <ProfileImageEdit/>
+          <ProfileImageEdit />
         </Modal>
       )}
     </>

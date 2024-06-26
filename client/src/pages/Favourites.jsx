@@ -13,8 +13,12 @@ import {
 } from "../util/requestToModifyFavourites";
 import { useDispatch } from "react-redux";
 import AddToCartButton from "../components/AddToCartButton";
+import { cartActions } from "../store/Cart";
+import { modalActions } from "../store/Modal";
+import Modal from "../components/Modal";
 const Favourites = () => {
   const user = getState("user");
+  const showModal = getState("modal");
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [favourites, setFavourites] = useState({
@@ -71,10 +75,15 @@ const Favourites = () => {
                   />
                   <FavouriteIcon
                     onAddToFavouriteClicked={(_id) => {
-                      markFoodItemAsfavourite(_id, dispatch, user);
+                      markFoodItemAsfavourite(_id, dispatch, user, navigate);
                     }}
                     onRemoveFromFavouriteClicked={(_id) => {
-                      removeFoodItemFromFavourite(_id, dispatch, user);
+                      removeFoodItemFromFavourite(
+                        _id,
+                        dispatch,
+                        user,
+                        navigate
+                      );
                     }}
                     _id={card._id}
                     favouriteArray={favourites.favouriteFoodItems.map(
@@ -128,10 +137,15 @@ const Favourites = () => {
                   />
                   <FavouriteIcon
                     onAddToFavouriteClicked={(_id) => {
-                      markRestaurantAsfavourite(_id, dispatch, user);
+                      markRestaurantAsfavourite(_id, dispatch, user, navigate);
                     }}
                     onRemoveFromFavouriteClicked={(_id) => {
-                      removeRestaurantFromFavourite(_id, dispatch, user);
+                      removeRestaurantFromFavourite(
+                        _id,
+                        dispatch,
+                        user,
+                        navigate
+                      );
                     }}
                     _id={card._id}
                     favouriteArray={favourites.favouriteRestaurants.map(
@@ -177,6 +191,37 @@ const Favourites = () => {
           )}
         </div>
       </div>
+      {showModal == "itemsInCart" && (
+        <Modal modalWidth="w-1/3">
+          <div className="flex flex-col space-y-2 ">
+            <h1 className="text-3xl font-bold">Items already in cart</h1>
+            <p>
+              Your cart contains items from other restaurant. Would you like to
+              reset your cart for adding items from this restaurant?
+            </p>
+            <div className="flex space-x-2 items-center justify-end">
+              <button
+                className="btn-secondary"
+                onClick={() => {
+                  dispatch(modalActions.toggleModal(""));
+                }}
+              >
+                No
+              </button>
+              <button
+                className="btn-primary"
+                onClick={() => {
+                  dispatch(cartActions.clearCart());
+                  dispatch(cartActions.addToCart(item));
+                  dispatch(modalActions.toggleModal(""));
+                }}
+              >
+                Yes
+              </button>
+            </div>
+          </div>
+        </Modal>
+      )}
     </>
   );
 };

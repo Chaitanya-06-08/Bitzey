@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Hamburger from "../Hamburger";
 import { useDispatch } from "react-redux";
 import { loadingActions } from "../../store/Loading";
 import { FaCircle } from "react-icons/fa";
@@ -88,7 +87,7 @@ const RestaurantOrders = () => {
     try {
       let response = await axios.post(`/api/updateOrderStatus`, {
         _id,
-        status:status.toLowerCase(),
+        status: status.toLowerCase(),
       });
       console.log(response.data);
       await getOrders();
@@ -109,7 +108,6 @@ const RestaurantOrders = () => {
   };
   return (
     <>
-      <Hamburger />
       <div
         className={`${
           showSidebar ? "" : "max-w-[60%]"
@@ -213,7 +211,7 @@ const OrdersLayout = ({
     <>
       <div className="flex flex-col space-y-3">
         <div className="flex items-center justify-between">
-        <h1 className="text-3xl text-brand-primary w-full border-b-2 border-b-gray-200 py-2 font-bold">
+          <h1 className="text-3xl text-brand-primary w-full border-b-2 border-b-gray-200 py-2 font-bold">
             {heading}
           </h1>
           <Dropdown
@@ -274,7 +272,9 @@ const OrdersLayout = ({
                     </div>
                     <div className="py-2 px-8 flex flex-col justify-between space-y-3">
                       <div className="flex space-x-4">
-                        <p className="text-xl font-semibold ">Order Details :</p>
+                        <p className="text-xl font-semibold ">
+                          Order Details :
+                        </p>
                         <div className="flex flex-wrap items-center space-x-3">
                           {order.items.map((item, ind) => {
                             return (
@@ -295,17 +295,23 @@ const OrdersLayout = ({
                           })}
                         </div>
                       </div>
-                      <p className="font-semibold">
+                      <p className="font-semibold underline">
                         Total Amount: &#8377;{order.totalPrice}
                       </p>
                       <div className="flex space-x-3">
                         {order.deliveryStatus != "delivered" && (
                           <>
                             <div className="flex items-center space-x-2">
-                              <p className="w-full font-bold text-xl">Status Of Order:</p>
+                              <p className="w-full font-bold text-xl">
+                                Status Of Order:
+                              </p>
                               <Dropdown
                                 placeholder={"Order Status"}
-                                options={["Pending","Out For Delivery", "Delivered"]}
+                                options={[
+                                  "Pending",
+                                  "Out For Delivery",
+                                  "Delivered",
+                                ]}
                                 width={"w-52"}
                                 currentOption={order.deliveryStatus}
                                 onOptionClicked={(status) => {

@@ -2,7 +2,12 @@ import axios from "axios";
 import requestAccessTokenRefresh from "./requestAccessTokenRefresh";
 import { userActions } from "../store/User";
 import toast from "react-hot-toast";
-export const markRestaurantAsfavourite = async (_id,dispatch,user) => {
+export const markRestaurantAsfavourite = async (
+  _id,
+  dispatch,
+  user,
+  navigate
+) => {
   try {
     let response = await axios.post(
       `/api/markRestaurantAsFavourite`,
@@ -26,7 +31,12 @@ export const markRestaurantAsfavourite = async (_id,dispatch,user) => {
     }
   }
 };
-export const removeRestaurantFromFavourite = async (_id,dispatch,user) => {
+export const removeRestaurantFromFavourite = async (
+  _id,
+  dispatch,
+  user,
+  navigate
+) => {
   try {
     let response = await axios.post(
       `/api/reomveRestaurantFromFavourite`,
@@ -51,7 +61,12 @@ export const removeRestaurantFromFavourite = async (_id,dispatch,user) => {
   }
 };
 
-export const markFoodItemAsfavourite = async (_id, dispatch,user) => {
+export const markFoodItemAsfavourite = async (
+  _id,
+  dispatch,
+  user,
+  navigate
+) => {
   try {
     let response = await axios.post(
       `/api/markFoodItemAsFavourite`,
@@ -76,7 +91,12 @@ export const markFoodItemAsfavourite = async (_id, dispatch,user) => {
   }
 };
 
-export const removeFoodItemFromFavourite = async (_id,dispatch,user) => {
+export const removeFoodItemFromFavourite = async (
+  _id,
+  dispatch,
+  user,
+  navigate
+) => {
   try {
     let response = await axios.post(
       `/api/removeFoodItemFromFavourite`,

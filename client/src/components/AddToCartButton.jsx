@@ -2,10 +2,11 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { cartActions } from "../store/Cart";
 import { getState } from "../util/getState";
+import { modalActions } from "../store/Modal";
 const AddToCartButton = ({ item }) => {
   const dispatch = useDispatch();
   const cart = getState("cart");
-  
+
   const checkIfItemIsPresent = (item) => {
     if (!cart || cart?.items.length == 0) return -1;
     let index = cart.items.findIndex(

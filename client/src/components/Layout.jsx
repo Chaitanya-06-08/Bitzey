@@ -7,10 +7,11 @@ import { getState } from "../util/getState";
 import Modal from "./Modal";
 import { useDispatch } from "react-redux";
 import { modalActions } from "../store/Modal";
+import { cartActions } from "../store/Cart";
 import ConfirmOrder from "./ConfirmOrder";
 import orderSuccess from "../assets/order-success.png";
 import ProfileImageEdit from "./ProfileImageEdit";
-import Loader from "./Loader";
+import Hamburger from "./Hamburger";
 const Layout = () => {
   const showSidebar = getState("sidebar");
   const showModal = getState("modal");
@@ -20,11 +21,11 @@ const Layout = () => {
   return (
     <>
       <div className="bg-white w-full h-full flex font-brand-primaryFont">
-        <div></div>
         {showSidebar && <Sidebar />}
+        {!showSidebar && <Hamburger />}
         <div
           className={`${
-            showSidebar ? "w-4/5" : "w-full"
+            showSidebar ? "w-4/5" : "w-[97%]"
           } h-screen overflow-y-scroll`}
         >
           {/* navigation */}
@@ -32,8 +33,7 @@ const Layout = () => {
 
           {/* outlet */}
           <Outlet></Outlet>
-
-          <Footer></Footer>
+          {!showLoading && <Footer></Footer>}
         </div>
       </div>
       {showModal == "loginToPlaceOrder" && (
@@ -113,6 +113,37 @@ const Layout = () => {
       {showModal == "profileImageEdit" && (
         <Modal modalWidth="w-1/3 p-8">
           <ProfileImageEdit />
+        </Modal>
+      )}
+      {showModal == "itemsInCart" && (
+        <Modal modalWidth="w-1/3">
+          <div className="flex flex-col space-y-2 ">
+            <h1 className="text-3xl font-bold">Items already in cart</h1>
+            <p>
+              Your cart contains items from other restaurant. Would you like to
+              reset your cart for adding items from this restaurant?
+            </p>
+            <div className="flex space-x-2 items-center justify-end">
+              <button
+                className="btn-secondary"
+                onClick={() => {
+                  dispatch(modalActions.toggleModal(""));
+                }}
+              >
+                No
+              </button>
+              <button
+                className="btn-primary"
+                onClick={() => {
+                  dispatch(cartActions.clearCart());
+                  dispatch(cartActions.addToCart(item));
+                  dispatch(modalActions.toggleModal(""));
+                }}
+              >
+                Yes
+              </button>
+            </div>
+          </div>
         </Modal>
       )}
     </>

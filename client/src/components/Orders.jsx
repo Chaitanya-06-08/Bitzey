@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { getState } from "../util/getState";
-import Hamburger from "./Hamburger";
 import { useDispatch } from "react-redux";
 import { loadingActions } from "../store/Loading";
 import { FaCircle } from "react-icons/fa";
@@ -86,7 +85,6 @@ const Orders = () => {
   };
   return (
     <>
-      <Hamburger />
       <div
         className={`${
           showSidebar ? "" : "max-w-[60%]"
@@ -285,7 +283,7 @@ const OrdersLayout = ({
                           })}
                         </div>
                       </div>
-                      <p className="font-semibold">
+                      <p className="font-semibold underline">
                         Total Amount: &#8377;{order.totalPrice}
                       </p>
                       <div className="flex space-x-3">

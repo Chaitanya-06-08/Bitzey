@@ -4,7 +4,6 @@ import ShowcaseContent from "../components/ShowcaseContent";
 import { motion } from "framer-motion";
 import { NavLink } from "react-router-dom";
 import { getState } from "../util/getState";
-import Hamburger from "../components/Hamburger";
 const Home = () => {
   const contentVariants = {
     initial: {
@@ -25,10 +24,8 @@ const Home = () => {
   const showSidebar = getState("sidebar");
   return (
     <>
-      <main className={`${showSidebar?"":"mx-auto max-w-[83.3333333%]"}`}>
-      {!showSidebar && (
-        <Hamburger/>
-      )}
+      <main className={`${showSidebar ? "" : "mx-auto max-w-[83.3333333%]"}`}>
+        {/* {!showSidebar && <Hamburger />} */}
         <div
           className={` flex items-center justify-center px-8 font-brandFont`}
           id="Content"
@@ -44,8 +41,8 @@ const Home = () => {
               Your one stop destination for decilcious food
             </h2>
             <p>
-              Choose your favourite meal from our broad selection of
-              available restaurants and enjoy a delicious lunch or dinner at home
+              Choose your favourite meal from our broad selection of available
+              restaurants and enjoy a delicious lunch or dinner at home
             </p>
             <NavLink to="/restaurants">
               <button className="btn-primary w-fit">Order Now</button>

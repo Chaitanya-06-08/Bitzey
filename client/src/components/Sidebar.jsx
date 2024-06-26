@@ -57,7 +57,7 @@ const Sidebar = () => {
       }
     } catch (error) {
       console.log(error);
-      if (error.response.status == 403||error.response.status == 401) {
+      if (error.response.status == 403 || error.response.status == 401) {
         await requestAccessTokenRefresh(
           user,
           location,
@@ -219,7 +219,7 @@ const Sidebar = () => {
             ) : (
               <>
                 <NavLink
-                  to="#"
+                  to="profile"
                   className={`${
                     user.isLoggedIn ? "cursor-pointer" : "cursor-not-allowed"
                   }`}

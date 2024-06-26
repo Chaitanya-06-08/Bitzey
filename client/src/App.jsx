@@ -4,7 +4,6 @@ import {
   createRoutesFromElements,
   Route,
   RouterProvider,
-  Routes,
 } from "react-router-dom";
 
 import Home from "./pages/Home";
@@ -26,6 +25,7 @@ import PersistentLogin from "./components/Auth/PersistentLogin";
 import Orders from "./components/Orders";
 import Favourites from "./pages/Favourites";
 import RestaurantOrders from "./components/Restaurant/RestaurantOrders";
+import Profile from "./components/Profile";
 function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
@@ -34,11 +34,12 @@ function App() {
           <Route index element={<Home />}></Route>
           <Route path="restaurants" element={<Restaurants />}></Route>
           <Route path="restaurantPage/:_id/" element={<RestaurantPage />}>
-            <Route path="menu" element={<RestaurantMenu/>}></Route>
+            <Route path="menu" element={<RestaurantMenu />}></Route>
             <Route path="reviews"></Route>
           </Route>
-          <Route path="orders" element={<Orders/>}></Route>
-          <Route path="favourites" element={<Favourites/>}></Route>
+          <Route path="orders" element={<Orders />}></Route>
+          <Route path="favourites" element={<Favourites />}></Route>
+          <Route path="profile" element={<Profile />}></Route>
         </Route>
         <Route path="/auth/">
           <Route
@@ -57,7 +58,7 @@ function App() {
         </Route>
         <Route path="/restaurant" element={<AdminLayout />}>
           <Route index path="dashboard" element={<Dashboard />}></Route>
-          <Route path="orders" element={<RestaurantOrders/>}></Route>
+          <Route path="orders" element={<RestaurantOrders />}></Route>
           <Route path="addmenuitem" element={<AddMenuItem />}></Route>
           <Route path="menu/" element={<Menu />}>
             <Route path="editmenuitem"></Route>
