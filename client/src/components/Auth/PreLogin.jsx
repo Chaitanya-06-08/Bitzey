@@ -17,7 +17,7 @@ const PreLogin = () => {
               Sign Up
             </NavLink>
             <NavLink to="login/customer" className="btn-secondary">
-              Sign In
+              Login
             </NavLink>
           </div>
         </div>
@@ -29,14 +29,15 @@ const PreLogin = () => {
         <div className="flex flex-col space-y-2 items-center justify-center text-white">
           <h1 className="text-3xl">Restaurant</h1>
           <p className="text-xl text-center">
-            Looking to partner with the best online restaurant business merchandise?
+            Looking to partner with the best online restaurant business
+            merchandise?
           </p>
           <div className="flex space-x-4">
             <NavLink to="signup/restaurant" className="btn-primary">
               Register
             </NavLink>
             <NavLink to="login/restaurant" className="btn-secondary">
-              Sign In
+              Login
             </NavLink>
           </div>
         </div>

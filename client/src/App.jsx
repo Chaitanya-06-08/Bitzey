@@ -26,6 +26,7 @@ import Orders from "./components/Orders";
 import Favourites from "./pages/Favourites";
 import RestaurantOrders from "./components/Restaurant/RestaurantOrders";
 import Profile from "./components/Profile";
+import PaymentStatus from "./components/PaymentStatus";
 function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
@@ -64,6 +65,10 @@ function App() {
             <Route path="editmenuitem"></Route>
           </Route>
         </Route>
+        <Route
+          path="/paymentStatus/:payment_reference_id"
+          element={<PaymentStatus />}
+        ></Route>
       </Route>
     )
   );

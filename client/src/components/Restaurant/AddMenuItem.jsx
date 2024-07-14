@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../../util/axios";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { IoIosCloudUpload } from "react-icons/io";
@@ -196,10 +196,10 @@ const AddMenuItem = () => {
                               ? "bg-white text-brand-primary"
                               : ""
                           } text-xl rounded-md border-2 border-gray-300 my-2 px-3 py-2 transition-all cursor-pointer`}
-                          onClick={()=>{
-                            setItem(prev=>{
-                              return {...prev,category:category}
-                            })
+                          onClick={() => {
+                            setItem((prev) => {
+                              return { ...prev, category: category };
+                            });
                           }}
                         >
                           {category}

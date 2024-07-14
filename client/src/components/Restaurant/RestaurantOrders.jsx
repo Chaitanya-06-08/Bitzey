@@ -4,7 +4,7 @@ import { loadingActions } from "../../store/Loading";
 import { FaCircle } from "react-icons/fa";
 import { BsFillTriangleFill } from "react-icons/bs";
 import requestAccessTokenRefresh from "../../util/requestAccessTokenRefresh";
-import axios from "axios";
+import axios from "../../util/axios";
 import toast from "react-hot-toast";
 import Dropdown from "../Dropdown";
 import CancelOrder from "../CancelOrder";
@@ -225,81 +225,79 @@ const OrdersLayout = ({
           <div className="flex flex-col space-y-3">
             {filteredOrders?.map((order, ind) => {
               return (
-                <>
-                  <div
-                    key={ind}
-                    className="rounded-xl border-2 border-gray-300 w-full p-3 bg-white shadow-xl"
-                  >
-                    <div className="flex space-x-4 ">
-                      <div className="w-1/4 h-full rounded-xl">
-                        <img
-                          src={order.restaurant_id.image.imageUrl}
-                          alt=""
-                          className="w-full h-full object-fill rounded-xl"
-                        />
-                      </div>
-                      <div className="w-3/4 flex flex-col space-y-2">
-                        <h2 className="text-xl text-brand-primary font-bold flex justify-between">
-                          <span>Order ID: {order._id}</span>
-                          <span>{returnOrderedTime(order.createdAt)}</span>
-                        </h2>
-                        <h2 className="text-xl text-green-500 font-bold">
-                          {order.deliveryStatus == "pending" ? (
-                            <span>
-                              Estimated Delivery By:{" "}
-                              {formatTime(order.createdAt)}
-                            </span>
-                          ) : (
-                            <span>
-                              Delivery Status : {order.deliveryStatus}
-                            </span>
-                          )}
-                        </h2>
-                        <div className="flex space-x-4 bg-gray-100 rounded-xl py-2 px-4">
-                          <div className="flex items-start space-x-2 w-1/2">
-                            <p className="text-green-500 font-semibold">To:</p>
-                            <div className="flex flex-col">
-                              <p>{order.customerName}</p>
-                              <p>{order.deliveryLocation.address}</p>
-                              <p>
-                                {order.deliveryLocation.city},{" "}
-                                {order.deliveryLocation.state}
-                              </p>
-                            </div>
+                <div
+                  key={ind}
+                  className="rounded-xl border-2 border-gray-300 w-full p-3 bg-white shadow-xl"
+                >
+                  <div className="flex space-x-4 ">
+                    <div className="w-1/4 h-full rounded-xl">
+                      <img
+                        src={order.restaurant_id.image.imageUrl}
+                        alt=""
+                        className="w-full h-full object-fill rounded-xl"
+                      />
+                    </div>
+                    <div className="w-3/4 flex flex-col space-y-2">
+                      <h2 className="text-xl text-brand-primary font-bold flex justify-between">
+                        <span>Order ID: {order._id}</span>
+                        <span>{returnOrderedTime(order.createdAt)}</span>
+                      </h2>
+                      <h2 className="text-xl text-green-500 font-bold">
+                        {order.deliveryStatus == "pending" ? (
+                          <span>
+                            Estimated Delivery By: {formatTime(order.createdAt)}
+                          </span>
+                        ) : (
+                          <span>Delivery Status : {order.deliveryStatus}</span>
+                        )}
+                      </h2>
+                      <div className="flex space-x-4 bg-gray-100 rounded-xl py-2 px-4">
+                        <div className="flex items-start space-x-2 w-1/2">
+                          <p className="text-green-500 font-semibold">To:</p>
+                          <div className="flex flex-col">
+                            <p>{order.customerName}</p>
+                            <p>{order.deliveryLocation.address}</p>
+                            <p>
+                              {order.deliveryLocation.city},{" "}
+                              {order.deliveryLocation.state}
+                            </p>
                           </div>
                         </div>
                       </div>
                     </div>
-                    <div className="py-2 px-8 flex flex-col justify-between space-y-3">
-                      <div className="flex space-x-4">
-                        <p className="text-xl font-semibold ">
-                          Order Details :
-                        </p>
-                        <div className="flex flex-wrap items-center space-x-3">
-                          {order.items.map((item, ind) => {
-                            return (
-                              <p key={ind} className="flex space-x-2">
-                                <span>
-                                  {item.item_id.type == "veg" && (
-                                    <FaCircle className="text-green-500 p-1 rounded-lg border-2 border-green-500 font-bold w-fit text-2xl" />
-                                  )}
-                                  {item.item_id.type == "non-veg" && (
-                                    <BsFillTriangleFill className="text-red-500 rounded-lg border-2 border-red-500 font-bold w-fit text-2xl p-1" />
-                                  )}{" "}
-                                </span>
-                                <span>
-                                  {item.item_id.name} x{item.quantity}
-                                </span>
-                              </p>
-                            );
-                          })}
-                        </div>
+                  </div>
+                  <div className="py-2 px-8 flex flex-col justify-between space-y-3">
+                    <div className="flex space-x-4">
+                      <p className="text-xl font-semibold ">Order Details :</p>
+                      <div className="flex flex-wrap items-center space-x-3">
+                        {order.items.map((item, ind) => {
+                          return (
+                            <p key={ind} className="flex space-x-2">
+                              <span>
+                                {item.item_id.type == "veg" && (
+                                  <FaCircle className="text-green-500 p-1 rounded-lg border-2 border-green-500 font-bold w-fit text-2xl" />
+                                )}
+                                {item.item_id.type == "non-veg" && (
+                                  <BsFillTriangleFill className="text-red-500 rounded-lg border-2 border-red-500 font-bold w-fit text-2xl p-1" />
+                                )}{" "}
+                              </span>
+                              <span className="font-semibold">
+                                {item.item_id.name} x{item.quantity}
+                              </span>
+                            </p>
+                          );
+                        })}
                       </div>
-                      <p className="font-semibold underline">
-                        Total Amount: &#8377;{order.totalPrice}
-                      </p>
-                      <div className="flex space-x-3">
-                        {order.deliveryStatus != "delivered" && (
+                    </div>
+                    <p className="font-semibold underline">
+                      Total Amount:{" "}
+                      <span className="text-green-500">
+                        &#8377;{order.totalPrice}
+                      </span>
+                    </p>
+                    <div className="flex space-x-3">
+                      {order.deliveryStatus != "delivered" &&
+                        order.deliveryStatus != "cancelled" && (
                           <>
                             <div className="flex items-center space-x-2">
                               <p className="w-full font-bold text-xl">
@@ -328,19 +326,9 @@ const OrdersLayout = ({
                             </button> */}
                           </>
                         )}
-                      </div>
                     </div>
                   </div>
-                  {showModal == "cancelOrder" && (
-                    <Modal modalWidth="w-1/2">
-                      <CancelOrder
-                        onCancelOrderClicked={() => {
-                          cancelOrder(order._id);
-                        }}
-                      />
-                    </Modal>
-                  )}
-                </>
+                </div>
               );
             })}
           </div>

@@ -7,6 +7,7 @@ import {
   Title,
 } from "chart.js/auto";
 import { Doughnut } from "react-chartjs-2";
+import { NavLink } from "react-router-dom";
 
 ChartJS.register(ArcElement, Tooltip, Legend, Title);
 const CategoryGraph = ({ categoryData }) => {
@@ -21,7 +22,7 @@ const CategoryGraph = ({ categoryData }) => {
   };
   const options = {
     responsive: true,
-    aspectRatio:1.3,
+    aspectRatio: 1.3,
     plugins: {
       title: {
         display: true,
@@ -29,9 +30,9 @@ const CategoryGraph = ({ categoryData }) => {
         font: {
           size: 24,
           family: "Poppins,sans-serif",
-          weight:'bold'
+          weight: "bold",
         },
-        color:"red"
+        color: "red",
       },
       legend: {
         position: "top",
@@ -44,7 +45,25 @@ const CategoryGraph = ({ categoryData }) => {
       },
     },
   };
-  return <Doughnut data={data} options={options} />;
+  return (
+    <>
+      {categoryData?.length > 0 ? (
+        <Doughnut data={data} options={options} />
+      ) : (
+        <div className="flex items-center flex-col space-y-10">
+          <h1 className="text-2xl text-brand-primary font-bold">
+            Category Data
+          </h1>
+          <h1 className="text-xl text-brand-primary">
+            No Food Items were added to the menu.....
+          </h1>
+          <NavLink className="btn-primary" to="/restaurant/addmenuitem">
+            Add Food Items
+          </NavLink>
+        </div>
+      )}
+    </>
+  );
 };
 
 export default CategoryGraph;

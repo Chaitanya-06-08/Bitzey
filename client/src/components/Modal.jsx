@@ -11,7 +11,7 @@ const Modal = ({ modalWidth, children }) => {
         <button
           className="absolute top-0 right-0 m-3 text-white rounded-xl font-bold text-xl"
           onClick={() => {
-            dispatch(modalActions.toggleModal(''));
+            dispatch(modalActions.toggleModal(""));
           }}
         >
           &#x2715;

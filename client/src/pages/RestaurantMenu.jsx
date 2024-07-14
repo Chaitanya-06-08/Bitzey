@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../util/axios";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
@@ -83,9 +83,7 @@ const RestaurantMenu = () => {
                   } flex flex-col px-12 transition-all`}
                 >
                   {category.items.map((item, ind) => {
-                    return (
-                      <RestaurantMenuItem item={item} key={ind} />
-                    );
+                    return <RestaurantMenuItem item={item} key={ind} />;
                   })}
                 </div>
               </div>

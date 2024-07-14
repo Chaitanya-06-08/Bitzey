@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { getState } from "../util/getState";
-import axios from "axios";
+import axios from "../util/axios";
 import toast from "react-hot-toast";
 import { FaStar } from "react-icons/fa";
 import FavouriteIcon from "../components/FavouriteIcon";
@@ -112,7 +112,7 @@ const Favourites = () => {
           })}
           {favourites.favouriteFoodItems.length == 0 && (
             <h1 className="text-xl text-brand-shade text-center font-bold bg-gray-100 p-2 rounded-xl w-full">
-              No Favourite FoodItems found...
+              No Favourite FoodItems were marked...
             </h1>
           )}
         </div>
@@ -186,7 +186,7 @@ const Favourites = () => {
           })}
           {favourites.favouriteRestaurants.length == 0 && (
             <h1 className="text-xl text-brand-shade text-center font-bold bg-gray-100 p-2 rounded-xl w-full">
-              No Favourite restaurants found...
+              No Favourite restaurants were marked...
             </h1>
           )}
         </div>

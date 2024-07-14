@@ -4,7 +4,7 @@ import { TfiPackage } from "react-icons/tfi";
 import { HiCurrencyRupee } from "react-icons/hi2";
 import { MdRestaurantMenu } from "react-icons/md";
 import { HiUserGroup } from "react-icons/hi";
-import axios from "axios";
+import axios from "../../util/axios";
 import requestAccessTokenRefresh from "../../util/requestAccessTokenRefresh";
 import { useDispatch } from "react-redux";
 import { loadingActions } from "../../store/Loading";
@@ -12,9 +12,11 @@ import Loader from "../Loader";
 import { motion } from "framer-motion";
 import CategoryGraph from "./CategoryGraph";
 import RevenueGraph from "./RevenueGraph";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const showLoading = getState("loading");
   const showSidebar = getState("sidebar");
   const restaurant = getState("restaurant");
@@ -53,7 +55,7 @@ const Dashboard = () => {
     };
     if (user._id) getDashboardDetails();
   }, [user]);
-
+  console.log(dashboardDetails);
   return (
     <>
       {showLoading && <Loader />}
@@ -95,7 +97,7 @@ const Dashboard = () => {
               <CategoryGraph categoryData={dashboardDetails?.categoryData} />
             </div>
             <div className="flex flex-col items-center justify-center space-y-2 border-2 border-gray-200 rounded-xl shadow-xl w-1/2 p-8">
-              <RevenueGraph revenueData={dashboardDetails?.revenueData}/>
+              <RevenueGraph revenueData={dashboardDetails?.revenueData} />
             </div>
           </div>
         </motion.div>

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { getState } from "../../util/getState";
-import axios from "axios";
+import axios from "../../util/axios";
 import { loadingActions } from "../../store/Loading";
 import { FaUser } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
@@ -126,8 +126,8 @@ const RestaurantSignup = () => {
           },
           name: signupDetails.restaurantName,
           image: {
-            imageUrl:signupDetails.restaurantImage,
-            public_id:signupDetails.public_id
+            imageUrl: signupDetails.restaurantImage,
+            public_id: signupDetails.public_id,
           },
           location: {
             address: signupDetails.address,
@@ -476,7 +476,9 @@ const RestaurantSignup = () => {
                               ? "bg-white text-brand-primary"
                               : ""
                           } text-xl rounded-md border-2 border-gray-300 my-2 px-3 py-2 transition-all cursor-pointer`}
-                          onClick={()=>{toggleCuisine(cuisine)}}
+                          onClick={() => {
+                            toggleCuisine(cuisine);
+                          }}
                         >
                           {cuisine}
                         </div>

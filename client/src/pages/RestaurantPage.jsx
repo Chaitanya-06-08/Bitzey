@@ -19,7 +19,7 @@ import { IoHeart } from "react-icons/io5";
 import { FaStar } from "react-icons/fa";
 import { MdShare } from "react-icons/md";
 import toast from "react-hot-toast";
-import axios from "axios";
+import axios from "../util/axios";
 import { getState } from "../util/getState";
 import Loader from "../components/Loader";
 const RestaurantPage = () => {

@@ -1,10 +1,10 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import Navigation from "../Navigation";
 import { MdOutlineDocumentScanner } from "react-icons/md";
 import { RiPagesLine } from "react-icons/ri";
 import { LuPackageCheck } from "react-icons/lu";
 import Footer from "../Footer";
+import Navigation from "../Navigation";
 const RestaurantLogin = () => {
   return (
     <>
@@ -60,7 +60,8 @@ const RestaurantLogin = () => {
               <h1 className="text-xl font-semibold">Step 2</h1>
               <p className="text-lg">Create your page at bitzey</p>
               <p className="font-light px-4">
-                Add exicting things to your restaurant profile so that customers find them attractive 
+                Add exicting things to your restaurant profile so that customers
+                find them attractive
               </p>
             </div>
             <div className="flex flex-col items-center w-80 space-y-4 bg-white rounded-xl py-8 h-80">

@@ -8,7 +8,7 @@ import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
 import { FaGoogle } from "react-icons/fa";
 import toast from "react-hot-toast";
-import axios from "axios";
+import axios from "../../util/axios";
 import { loadingActions } from "../../store/Loading";
 import { useSelector, useDispatch } from "react-redux";
 import { NavLink } from "react-router-dom";
@@ -33,7 +33,7 @@ const Signup = () => {
         email,
         password,
         confirmPassword,
-        usertype:"customer"
+        usertype: "customer",
       });
       console.log(response);
       if (response.status == 200) {
@@ -81,7 +81,7 @@ const Signup = () => {
 
   return (
     <>
-      <Navigation/>
+      <Navigation />
       <div className={`${showLoading ? "blur" : ""} flex font-brandFont`}>
         <div className="w-1/2 flex items-center justify-center h-screen">
           <img

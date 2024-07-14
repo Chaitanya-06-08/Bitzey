@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../../util/axios";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { IoIosCloudUpload } from "react-icons/io";

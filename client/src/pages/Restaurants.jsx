@@ -8,7 +8,7 @@ import {
   removeRestaurantFromFavourite,
 } from "../util/requestToModifyFavourites";
 import { MdAccessTimeFilled } from "react-icons/md";
-import axios from "axios";
+import axios from "../util/axios";
 import { useDispatch } from "react-redux";
 import FavouriteIcon from "../components/FavouriteIcon";
 const Restaurants = () => {

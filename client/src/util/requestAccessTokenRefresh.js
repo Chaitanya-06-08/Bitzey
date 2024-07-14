@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../util/axios";
 import { userActions } from "../store/User";
 import { restaurantActions } from "../store/Restaurant";
 const requestAccessTokenRefresh = async (

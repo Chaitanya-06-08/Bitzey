@@ -12,4 +12,9 @@ router.post(
   verifyAccessToken,
   userController.removeUserProfileImage
 );
+router.post(
+  "/updateUserEmail",
+  verifyAccessToken,
+  userController.updateUserEmail
+);
 module.exports = router;

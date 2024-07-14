@@ -2,9 +2,8 @@ import React from "react";
 import { modalActions } from "../store/Modal";
 import { loadingActions } from "../store/Loading";
 import { useDispatch } from "react-redux";
-import axios from "axios";
-const CancelOrder = ({onCancelOrderClicked}) => {
-  
+import axios from "../util/axios";
+const CancelOrder = ({ onCancelOrderClicked }) => {
   const dispatch = useDispatch();
   return (
     <div className="flex flex-col items-center space-y-2">

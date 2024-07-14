@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "../util/axios";
 import requestAccessTokenRefresh from "./requestAccessTokenRefresh";
 import { userActions } from "../store/User";
 import toast from "react-hot-toast";

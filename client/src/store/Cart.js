@@ -29,6 +29,25 @@ export const cartSlice = createSlice({
       localStorage.setItem("cart", JSON.stringify(cart));
       return cart;
     },
+    addBulkItemstocart(state, action) {
+      let items = action.payload;
+      let cart = state;
+      items.map((itemObj) => {
+        let item = itemObj.item;
+        let index = cart.items.findIndex(
+          (cartitem) => cartitem.item._id == item._id
+        );
+        if (index == -1) {
+          cart.items.push({ item: item, quantity: itemObj.quantity });
+        } else {
+          cart.items[index].quantity += itemObj.quantity;
+        }
+        cart.totalQuantity += itemObj.quantity;
+        cart.totalPrice += item.price * itemObj.quantity;
+      });
+      localStorage.setItem("cart", JSON.stringify(cart));
+      return cart;
+    },
     reduceQuantity(state, action) {
       let item = action.payload;
       let cart = state;
@@ -55,7 +74,7 @@ export const cartSlice = createSlice({
       localStorage.removeItem("cart");
       return newCart;
     },
-    deleteFromCart(state,action) {
+    deleteFromCart(state, action) {
       let item = action.payload;
       let cart = state;
       let index = cart.items.findIndex(

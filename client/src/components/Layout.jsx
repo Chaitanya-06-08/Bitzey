@@ -12,7 +12,9 @@ import ConfirmOrder from "./ConfirmOrder";
 import orderSuccess from "../assets/order-success.png";
 import ProfileImageEdit from "./ProfileImageEdit";
 import Hamburger from "./Hamburger";
+import useModalData from "../hooks/useModalData";
 const Layout = () => {
+  const { modalData } = useModalData();
   const showSidebar = getState("sidebar");
   const showModal = getState("modal");
   const showLoading = getState("loading");
@@ -136,7 +138,8 @@ const Layout = () => {
                 className="btn-primary"
                 onClick={() => {
                   dispatch(cartActions.clearCart());
-                  dispatch(cartActions.addToCart(item));
+                  console.log(modalData);
+                  dispatch(cartActions.addToCart(modalData));
                   dispatch(modalActions.toggleModal(""));
                 }}
               >

@@ -12,6 +12,7 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(
   cors({
     origin: process.env.CLIENT_ORIGIN,
@@ -27,6 +28,7 @@ const restaurantsRoute = require("./routes/Restaurants");
 const ordersRoute = require("./routes/Orders");
 const favouritesRoute = require("./routes/Favourites");
 const usersRoute = require("./routes/Users");
+const paymentsRoute = require("./routes/PaymentsRoute");
 
 app.use("/api", authRoute);
 app.use("/api", imageHandlingRoute);
@@ -35,6 +37,7 @@ app.use("/api", restaurantsRoute);
 app.use("/api", ordersRoute);
 app.use("/api", favouritesRoute);
 app.use("/api", usersRoute);
+app.use("/api", paymentsRoute);
 
 mongoose
   .connect(process.env.MONGO_DB_URI, {

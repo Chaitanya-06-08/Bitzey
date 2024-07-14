@@ -5,7 +5,7 @@ import { loadingActions } from "../store/Loading";
 import { FaCircle } from "react-icons/fa";
 import { BsFillTriangleFill } from "react-icons/bs";
 import requestAccessTokenRefresh from "../util/requestAccessTokenRefresh";
-import axios from "axios";
+import axios from "../util/axios";
 import toast from "react-hot-toast";
 import Dropdown from "./Dropdown";
 import { modalActions } from "../store/Modal";
@@ -13,13 +13,20 @@ import CancelOrder from "./CancelOrder";
 import Modal from "./Modal";
 import NoOrdersFound from "../assets/no-orders-found.png";
 import { useNavigate } from "react-router-dom";
+import { cartActions } from "../store/Cart";
+import useCartModalRef from "../hooks/useCartModalRef";
+import CartModal from "./CartModal";
 const Orders = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const cartref = useCartModalRef();
   const user = getState("user");
   const showSidebar = getState("sidebar");
   const [filteredOrders, setFilteredOrders] = useState([]);
   const [originalOrders, setOriginalOrders] = useState([]);
+  useEffect(() => {
+    if (user._id) getOrders();
+  }, [user]);
   const getOrders = async () => {
     dispatch(loadingActions.toggleLoading());
     try {
@@ -49,9 +56,6 @@ const Orders = () => {
       dispatch(loadingActions.toggleLoading());
     }
   };
-  useEffect(() => {
-    if (user._id) getOrders();
-  }, [user]);
 
   const handleOptionClick = (option) => {
     if (option == "All") {
@@ -83,6 +87,19 @@ const Orders = () => {
       }
     }
   };
+  const onReorderClick = async (order) => {
+    // console.log(order.items);
+    let items = order.items.map((itemObj) => {
+      return {
+        item: itemObj.item_id,
+        quantity: itemObj.quantity,
+      };
+    });
+    // console.log(items);
+    dispatch(cartActions.clearCart());
+    dispatch(cartActions.addBulkItemstocart(items));
+    cartref.current.showModal();
+  };
   return (
     <>
       <div
@@ -96,6 +113,7 @@ const Orders = () => {
             filteredOrders={filteredOrders}
             handleOptionClick={handleOptionClick}
             cancelOrder={cancelOrder}
+            handleReorderClick={onReorderClick}
           />
         ) : (
           <div className="w-full h-96 rounded-xl flex items-center">
@@ -120,6 +138,7 @@ const Orders = () => {
           </div>
         )}
       </div>
+      <CartModal ref={cartref} />
     </>
   );
 };
@@ -130,6 +149,7 @@ const OrdersLayout = ({
   heading,
   filteredOrders,
   handleOptionClick,
+  handleReorderClick,
   cancelOrder,
 }) => {
   const dispatch = useDispatch();
@@ -206,9 +226,9 @@ const OrdersLayout = ({
         </div>
         {filteredOrders.length > 0 && (
           <div className="flex flex-col space-y-3">
-            {filteredOrders?.map((order) => {
+            {filteredOrders?.map((order, ind) => {
               return (
-                <>
+                <div key={ind}>
                   <div className="rounded-xl border-2 border-gray-300 w-full p-3 bg-white shadow-xl">
                     <div className="flex space-x-4 ">
                       <div className="w-1/4 h-full rounded-xl">
@@ -298,7 +318,14 @@ const OrdersLayout = ({
                           </button>
                         )}
                         {order.deliveryStatus == "delivered" && (
-                          <button className="btn-addToCart">Reorder</button>
+                          <button
+                            className="btn-addToCart"
+                            onClick={() => {
+                              handleReorderClick(order);
+                            }}
+                          >
+                            Reorder
+                          </button>
                         )}
                       </div>
                     </div>
@@ -312,7 +339,7 @@ const OrdersLayout = ({
                       />
                     </Modal>
                   )}
-                </>
+                </div>
               );
             })}
           </div>

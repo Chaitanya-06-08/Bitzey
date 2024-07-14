@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { getState } from "../util/getState";
-import axios from "axios";
+import axios from "../util/axios";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { loadingActions } from "../store/Loading";
 import { modalActions } from "../store/Modal";
 import toast from "react-hot-toast";
-import { cartActions } from "../store/Cart";
+import Logo from "../assets/delivery.png";
+import { baseURL } from "../util/axios";
 const ConfirmOrder = () => {
   const user = getState("user");
   const navigate = useNavigate();
@@ -35,8 +36,44 @@ const ConfirmOrder = () => {
       }
     });
   };
+  const checkout = async (amount) => {
+    const {
+      data: { key },
+    } = await axios.get("/api/getPaymentAPIKey", { withCredentials: true });
+    console.log(key);
+    const {
+      data: { order },
+    } = await axios.post("/api/createPaymentOrder", {
+      amount,
+      currency: "INR",
+    });
+    console.log(order.id);
+    var options = {
+      key: key,
+      amount: Math.round(Number(amount)) * 100,
+      currency: "INR",
+      name: "Bitzey",
+      description: "Order Checkout",
+      image: Logo,
+      order_id: order.id,
+      callback_url: `${baseURL}/api/paymentVerification`,
+      prefill: {
+        name: user.username,
+        email: user.email,
+      },
+      notes: {
+        address: "Razorpay Corporate Office",
+      },
+      theme: {
+        color: "#FD2E2E",
+      },
+    };
+    var razorpay = new window.Razorpay(options);
+    razorpay.open();
+  };
   const placeOrder = async () => {
     let { name, address, city, state } = ConfirmOrderDetails;
+
     if (checkForEmpty([name, address, city, state])) {
       toast.error("Hey there, you left out some fields to fill");
       return;
@@ -45,32 +82,30 @@ const ConfirmOrder = () => {
     let { items, totalPrice } = cart;
     items = items.map((cartitem) => {
       return {
-        item_id:cartitem.item._id,
-        quantity:cartitem.quantity
-      }
+        item_id: cartitem.item._id,
+        quantity: cartitem.quantity,
+      };
     });
     dispatch(loadingActions.toggleLoading());
     try {
-      let response = await axios.post(
-        "/api/placeOrder",
-        {
-          user_email: user.email,
-          customerName: ConfirmOrderDetails.name,
-          restaurant_id: cart.items[0].item.restaurant_id,
-          items,
-          totalPrice,
-          deliveryLocation: {
-            address,
-            city,
-            state,
-          },
-          deliveryStatus: "pending",
-          paymentStatus: "success",
+      if (cart.totalQuantity < 3) totalPrice += 20;
+      const order = {
+        user_email: user.email,
+        customerName: ConfirmOrderDetails.name,
+        restaurant_id: cart.items[0].item.restaurant_id,
+        items,
+        totalPrice,
+        deliveryLocation: {
+          address,
+          city,
+          state,
         },
-        { withCredentials: true }
-      );
-      console.log(response.data);
-      dispatch(modalActions.toggleModal("orderSuccess"));
+        deliveryStatus: "pending",
+        paymentStatus: "success",
+      };
+      localStorage.setItem("order", JSON.stringify(order));
+      // console.log(localStorage.getItem("order"));
+      await checkout(totalPrice);
     } catch (error) {
       console.log(error);
       if (error.response.status == 403) {
@@ -86,7 +121,6 @@ const ConfirmOrder = () => {
       }
     } finally {
       dispatch(loadingActions.toggleLoading());
-      dispatch(cartActions.clearCart())
     }
   };
   return (

@@ -16,7 +16,7 @@ import { getState } from "../util/getState";
 import Tooltip from "./Tooltip";
 import { loadingActions } from "../store/Loading";
 import toast from "react-hot-toast";
-import axios from "axios";
+import axios from "../util/axios";
 import { userActions } from "../store/User";
 import requestAccessTokenRefresh from "../util/requestAccessTokenRefresh";
 import ProfileImage from "./ProfileImage";
@@ -115,7 +115,7 @@ const Sidebar = () => {
           {!user.isLoggedIn && (
             <div className="flex my-3 space-x-2 py-2">
               <NavLink to="/auth/">
-                <button className="btn-secondary">Sign In</button>
+                <button className="btn-secondary">Login</button>
               </NavLink>
               <NavLink to="/auth/">
                 <button className="btn-primary">Sign Up</button>

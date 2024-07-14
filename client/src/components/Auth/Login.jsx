@@ -5,7 +5,7 @@ import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
 import { FaGoogle } from "react-icons/fa";
 import { NavLink, useLocation } from "react-router-dom";
-import axios from "axios";
+import axios from "../../util/axios";
 import toast from "react-hot-toast";
 import { loadingActions } from "../../store/Loading";
 import { restaurantActions } from "../../store/Restaurant";
@@ -15,6 +15,9 @@ import { useNavigate } from "react-router-dom";
 import { getState } from "../../util/getState";
 import { useDispatch } from "react-redux";
 import Navigation from "../Navigation";
+
+// axios.defaults.baseURL = "http://localhost:3000";
+
 const Login = () => {
   const [loginDetails, setLoginDetails] = useState({
     email: "",
@@ -66,7 +69,7 @@ const Login = () => {
             refreshToken,
             usertype,
             favouriteFoodItems,
-            favouriteRestaurants
+            favouriteRestaurants,
           } = response.data.user;
           dispatch(
             userActions.setUser({
@@ -81,12 +84,12 @@ const Login = () => {
           localStorage.setItem("email", email);
           dispatch(userActions.setAccessToken(accessToken));
           dispatch(userActions.setRefreshToken(refreshToken));
-          dispatch(userActions.setFavouriteFooditems(favouriteFoodItems))
-          dispatch(userActions.setFavouriteRestaurants(favouriteRestaurants))
+          dispatch(userActions.setFavouriteFooditems(favouriteFoodItems));
+          dispatch(userActions.setFavouriteRestaurants(favouriteRestaurants));
 
           if (loginType == "customer") {
             let backToLink = location.state?.from || "/";
-            navigate(backToLink,{replace:true});
+            navigate(backToLink, { replace: true });
           } else {
             let { _id, user_id, name, image, location } =
               response.data.restaurantInfo;
@@ -102,7 +105,7 @@ const Login = () => {
               })
             );
             let backToLink = location.state?.from || "/restaurant/dashboard";
-            navigate(backToLink,{replace:true});
+            navigate(backToLink, { replace: true });
           }
         } else {
           toast.error(response.data.message);
@@ -129,7 +132,7 @@ const Login = () => {
 
   return (
     <>
-    <Navigation/>
+      <Navigation />
       <div className={`${showLoading ? "blur" : ""} flex font-brandFont`}>
         <div className="w-1/2 flex items-center justify-center">
           <img

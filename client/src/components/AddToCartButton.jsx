@@ -3,10 +3,11 @@ import { useDispatch } from "react-redux";
 import { cartActions } from "../store/Cart";
 import { getState } from "../util/getState";
 import { modalActions } from "../store/Modal";
+import useModalData from "../hooks/useModalData";
 const AddToCartButton = ({ item }) => {
   const dispatch = useDispatch();
   const cart = getState("cart");
-
+  const { setModalData } = useModalData();
   const checkIfItemIsPresent = (item) => {
     if (!cart || cart?.items.length == 0) return -1;
     let index = cart.items.findIndex(
@@ -51,6 +52,7 @@ const AddToCartButton = ({ item }) => {
               cart.items.length > 0 &&
               cart.items[0].item.restaurant_id != item.restaurant_id
             ) {
+              setModalData(item);
               dispatch(modalActions.toggleModal("itemsInCart"));
             } else dispatch(cartActions.addToCart(item));
           }}

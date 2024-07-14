@@ -5,7 +5,11 @@ import { NavLink } from "react-router-dom";
 import { motion } from "framer-motion";
 import logo from "../assets/delivery.png";
 import { getState } from "../util/getState";
+import { CgProfile } from "react-icons/cg";
 import CartModal from "./CartModal";
+import { useDispatch } from "react-redux";
+import { sidebarActions } from "../store/Sidebar";
+import useCartModalRef from "../hooks/useCartModalRef";
 const Navigation = () => {
   const navVariants = {
     initial: {
@@ -29,8 +33,8 @@ const Navigation = () => {
 
   const user = getState("user");
   const cart = getState("cart");
-  const cartref = useRef();
-
+  const cartref = useCartModalRef();
+  const dispatch = useDispatch();
   // console.log(user);
   return (
     <motion.div
@@ -39,7 +43,10 @@ const Navigation = () => {
       animate="current"
       className="flex items-center justify-between font-brandFont shadow-lg text-brand-primary text-xl sticky top-0 z-50 bg-white"
     >
-      <NavLink to="/">
+      <NavLink
+        to="/"
+        className={`${user.usertype == "restaurant" ? "w-1/3" : ""}`}
+      >
         <div className="flex items-center ml-4 space-x-2">
           <img src={logo} alt="Brand Logo" className="size-12" />
           <h1 className="text-3xl text-brand-primary italic font-bold">
@@ -80,7 +87,7 @@ const Navigation = () => {
               className={({ isActive }) => {
                 return (
                   (isActive ? `bg-brand-primary text-white ` : ``) +
-                  navLinkClasses 
+                  navLinkClasses
                 );
               }}
             >
@@ -104,24 +111,48 @@ const Navigation = () => {
         </ul>
       )}
 
+      {user?.usertype == "restaurant" && (
+        <h1 className="text-2xl text-brand-primary font-bold text-center w-1/3">
+          Restaurant Partner Page
+        </h1>
+      )}
+
       {/* Cart, dark mode */}
       <ul className="flex items-center space-x-4 w-1/3 justify-end px-10 h-16">
         {user.usertype != "restaurant" && (
           <li
-            className="relative flex items-center justify-center space-x-2 cursor-pointer h-fit p-3 hover:bg-brand-primary hover:text-white rounded-xl transition-all"
+            className="flex items-center justify-center space-x-2 cursor-pointer h-fit p-3 hover:bg-brand-primary hover:text-white rounded-xl transition-all"
             onClick={() => {
               cartref.current.showModal();
             }}
           >
             <FaCartShopping />
-            <span className=" top-0 right-0 rounded-3xl text-white bg-brand-primary px-1 text-base">
+            <span className="rounded-full text-white bg-brand-primary px-1 text-base">
               {cart.totalQuantity}
             </span>
           </li>
         )}
-        <li className="my-4 relative ">
+        {user?.isLoggedIn && (
+          <CgProfile
+            className="cursor-pointer text-3xl"
+            onClick={() => {
+              dispatch(sidebarActions.toggleSideBar());
+            }}
+          />
+        )}
+        {!user?.isLoggedIn && (
+          <div className="flex space-x-2 items-center">
+            <NavLink to="/auth/" className="btn-third-primary">
+              Login
+            </NavLink>
+            <NavLink to="/auth/" className="btn-third-secondary">
+              SignUp
+            </NavLink>
+          </div>
+        )}
+        {/* <li className="my-4 relative ">
           <Darktoggle />
-        </li>
+        </li> */}
       </ul>
       <CartModal ref={cartref} />
     </motion.div>

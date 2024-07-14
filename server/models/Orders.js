@@ -49,6 +49,10 @@ const OrdersSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    payment_reference_id: {
+      type: String,
+      required: true,
+    },
   },
   { timestamps: true, collection: "orders" }
 );

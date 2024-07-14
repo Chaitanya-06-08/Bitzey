@@ -35,7 +35,7 @@ const RevenueGraph = ({ revenueData }) => {
     "Dec",
   ];
   let revenueEachMonth = [];
-  revenueData.forEach((month) => {
+  revenueData?.forEach((month) => {
     revenueEachMonth[month._id] = month.totalRevenueOfMonth;
   });
   console.log(revenueEachMonth);
@@ -55,7 +55,7 @@ const RevenueGraph = ({ revenueData }) => {
   };
   const options = {
     responsive: true,
-    aspectRatio:1.4,
+    aspectRatio: 1.4,
     plugins: {
       title: {
         display: true,

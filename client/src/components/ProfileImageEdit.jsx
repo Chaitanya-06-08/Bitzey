@@ -4,7 +4,7 @@ import { IoIosCloudUpload } from "react-icons/io";
 import { MdDelete } from "react-icons/md";
 import { useDispatch } from "react-redux";
 import { loadingActions } from "../store/Loading";
-import axios from "axios";
+import axios from "../util/axios";
 import toast from "react-hot-toast";
 import { getState } from "../util/getState";
 import Loader from "./Loader";

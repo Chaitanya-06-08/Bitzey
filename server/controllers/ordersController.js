@@ -13,8 +13,9 @@ module.exports.placeOrder = async (req, res) => {
     deliveryLocation,
     deliveryStatus,
     paymentStatus,
+    payment_reference_id,
   } = req.body;
-  console.log(req.body);
+  // console.log(req.body);
   if (
     checkForempty([
       user_email,
@@ -23,6 +24,7 @@ module.exports.placeOrder = async (req, res) => {
       totalPrice,
       deliveryStatus,
       paymentStatus,
+      payment_reference_id,
     ]) ||
     items?.length == 0 ||
     !deliveryLocation
@@ -41,6 +43,7 @@ module.exports.placeOrder = async (req, res) => {
       deliveryLocation,
       deliveryStatus,
       paymentStatus,
+      payment_reference_id,
     });
     res.status(200).json({ message: "Order created successfully", order });
   } catch (error) {
@@ -57,9 +60,9 @@ module.exports.getOrdersByCustomerId = async (req, res) => {
     return res.status(400).json({ message: "Customer ID is missing" });
   }
   try {
-    let orders = await Order.find({ user_id: _id }).populate(
-      "items.item_id restaurant_id"
-    );
+    let orders = await Order.find({ user_id: _id })
+      .populate("items.item_id restaurant_id")
+      .sort({ createdAt: -1 });
     res.status(200).json({
       message: "Orders fetched successfully",
       orders,
@@ -117,9 +120,9 @@ module.exports.getOrdersByRestaurantId = async (req, res) => {
     return res.status(400).json({ message: "Restaurant ID is missing" });
   }
   try {
-    let orders = await Order.find({ restaurant_id: _id }).populate(
-      "items.item_id restaurant_id"
-    );
+    let orders = await Order.find({ restaurant_id: _id })
+      .populate("items.item_id restaurant_id")
+      .sort({ createdAt: -1 });
     res.status(200).json({
       message: "Orders fetched successfully",
       orders,
@@ -189,21 +192,29 @@ module.exports.getDashboardDetails = async (req, res) => {
     let revenueData = await Order.aggregate([
       {
         $match: {
-          restaurant_id: new ObjectId(_id), 
+          restaurant_id: new ObjectId(_id),
           createdAt: { $gt: startDate, $lt: endDate },
         },
       },
       {
-        $group:{
-          _id:{$month:"$createdAt"},
-          totalRevenueOfMonth:{$sum:"$totalPrice"}
-        }
+        $group: {
+          _id: { $month: "$createdAt" },
+          totalRevenueOfMonth: {
+            $sum: {
+              $cond: [
+                { $eq: ["$deliveryStatus", "delivered"] },
+                "$totalPrice",
+                0,
+              ],
+            },
+          },
+        },
       },
       {
-        $sort:{
-          _id:1
-        }
-      }
+        $sort: {
+          _id: 1,
+        },
+      },
     ]);
     console.log(revenueData);
     let dashboardDetails =
@@ -215,7 +226,12 @@ module.exports.getDashboardDetails = async (req, res) => {
             totalMenuItems: 0,
             categoryData: [],
           }
-        : { ...orders[0], totalMenuItems: menuitems, categoryData,revenueData };
+        : {
+            ...orders[0],
+            totalMenuItems: menuitems,
+            categoryData,
+            revenueData,
+          };
     res.status(200).json({
       message: "Dashboard details fetched successfully",
       dashboardDetails,
