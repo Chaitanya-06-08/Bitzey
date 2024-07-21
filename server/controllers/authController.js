@@ -11,7 +11,7 @@ module.exports.customerLogin = async (req, res) => {
   let { email, password, usertype } = req.body;
   if (checkForEmpty([email, password])) {
     return res.status(422).json({ message: "All details should be filled" });
-  } 
+  }
   try {
     let user = await User.findOne({
       $and: [{ email }, { usertype }],
@@ -40,7 +40,7 @@ module.exports.customerLogin = async (req, res) => {
     // console.log("Logged in:");
     // console.log(user);
     user.accessToken = accessToken;
-    const options = { httpOnly: true, secure: true };
+    const options = { httpOnly: true, secure: true, sameSite: "None" };
     res.cookie("accessToken", accessToken, options);
     res.cookie("refreshToken", refreshToken, options);
     res.status(200).json({
@@ -85,17 +85,17 @@ module.exports.restaurantLogin = async (req, res) => {
       .lean(true);
     // console.log("Logged in:");
     // console.log(temp);
-      user.accessToken=accessToken
+    user.accessToken = accessToken;
     let restaurant = await Restaurant.findOne({ user_id: user._id })
       .populate("user_id")
       .lean(true);
 
-    const options = { httpOnly: true, secure: true };
+    const options = { httpOnly: true, secure: true, sameSite: "None" };
     res.cookie("accessToken", accessToken, options);
     res.cookie("refreshToken", refreshToken, options);
     res.status(200).json({
       message: "Logged in successfully",
-      user:user,
+      user: user,
       restaurantInfo: restaurant,
     });
   } catch (err) {
@@ -236,7 +236,7 @@ module.exports.refreshAccessToken = async (req, res) => {
       }
       let userDetails = { ...user };
       let restaurantDetails = { ...restaurant };
-      const options = { httpOnly: true, secure: true };
+      const options = { httpOnly: true, secure: true, sameSite: "None" };
       res.cookie("accessToken", accessToken, options);
       res.cookie("refreshToken", user.refreshToken, options);
       res.status(200).json({
