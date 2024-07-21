@@ -26,6 +26,7 @@ export const cartSlice = createSlice({
       }
       cart.totalQuantity += 1;
       cart.totalPrice += item.price;
+      cart.totalPrice = parseFloat(parseFloat(cart.totalPrice).toFixed(2));
       localStorage.setItem("cart", JSON.stringify(cart));
       return cart;
     },
@@ -44,6 +45,7 @@ export const cartSlice = createSlice({
         }
         cart.totalQuantity += itemObj.quantity;
         cart.totalPrice += item.price * itemObj.quantity;
+        cart.totalPrice = parseFloat(parseFloat(cart.totalPrice).toFixed(2));
       });
       localStorage.setItem("cart", JSON.stringify(cart));
       return cart;
@@ -56,6 +58,7 @@ export const cartSlice = createSlice({
       );
       cart.items[index].quantity -= 1;
       cart.totalPrice -= item.price;
+      cart.totalPrice = parseFloat(parseFloat(cart.totalPrice).toFixed(2));
       cart.totalQuantity -= 1;
       if (cart.items[index].quantity == 0) {
         cart.items = cart.items.filter(
@@ -81,6 +84,7 @@ export const cartSlice = createSlice({
         (cartitem) => cartitem.item._id == item._id
       );
       cart.totalPrice -= item.price * cart.items[index].quantity;
+      cart.totalPrice = parseFloat(parseFloat(cart.totalPrice).toFixed(2));
       cart.totalQuantity -= cart.items[index].quantity;
       cart.items = cart.items.filter(
         (cartitem) => cartitem.item._id != item._id

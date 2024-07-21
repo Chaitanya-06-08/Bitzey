@@ -11,21 +11,88 @@ import { MdAccessTimeFilled } from "react-icons/md";
 import axios from "../util/axios";
 import { useDispatch } from "react-redux";
 import FavouriteIcon from "../components/FavouriteIcon";
+import { modalActions } from "../store/Modal";
+import Modal from "../components/Modal";
+import toast from "react-hot-toast";
 const Restaurants = () => {
   const [Restaurants, setRestaurants] = useState([]);
+  const [TempRestaurants, setTempRestaurants] = useState([]);
+  const [filterBy, setFilterBy] = useState(0);
+  const sortByOptions = ["Delivery Time", "Ratings"];
+  const [filters, setFilters] = useState({
+    sortBy: sortByOptions[0],
+    cuisines: [],
+  });
+  const cuisines = [
+    "American",
+    "Chinese",
+    "Hyderbadi",
+    "Biryani",
+    "North Indian",
+    "South Indian",
+    "Juices",
+    "Beverages",
+    "Kebab",
+    "Pizza",
+    "Fast Food",
+    "Dessert",
+    "korean",
+  ];
   const navigate = useNavigate();
   const showSidebar = getState("sidebar");
   const user = getState("user");
+  const showModal = getState("modal");
   const dispatch = useDispatch();
   useEffect(() => {
     const fetchRestaurants = async () => {
       let response = await axios.get("/api/fetchRestaurants");
-      setRestaurants(response.data.restaurants);
-      // console.log(response);
+      let restaurants = response.data.restaurants;
+      restaurants.forEach((restaurant) => {
+        restaurant.deliveryTime = 28 + Math.round(Math.random() * 20);
+        restaurant.ratings = Math.round(4 + Math.random());
+      });
+      setRestaurants(restaurants);
+      setTempRestaurants(restaurants);
+      // console.log(restaurants);
     };
     fetchRestaurants();
   }, []);
 
+  const filterChangeHandler = (e) => {
+    setFilters((prev) => {
+      return {
+        ...prev,
+        [e.target.name]: e.target.value,
+      };
+    });
+  };
+  const onApplyFilters = () => {
+    let filteredRestaurants = [...TempRestaurants];
+    filteredRestaurants.sort((a, b) => {
+      if (filters.sortBy == sortByOptions[0])
+        return a.deliveryTime - b.deliveryTime;
+      else if (filters.sortBy == sortByOptions[1]) return b.ratings - a.ratings;
+    });
+    // console.log(filteredRestaurants);
+    if (filters.cuisines.length > 0) {
+      filteredRestaurants = filteredRestaurants.filter((restaurant) => {
+        return filters.cuisines.some((cuisine) =>
+          restaurant.cuisines.includes(cuisine)
+        );
+      });
+    }
+    console.log(filteredRestaurants);
+    setTempRestaurants(filteredRestaurants);
+    dispatch(modalActions.toggleModal(""));
+    toast.success("Filtered Applied");
+  };
+  const onClearFitlers = () => {
+    setFilters({
+      sortBy: sortByOptions[0],
+      cuisines: [],
+    });
+    setTempRestaurants(Restaurants);
+  };
   return (
     <>
       <motion.div
@@ -40,13 +107,23 @@ const Restaurants = () => {
         // className="m-4 grid grid-cols-3 gap-8 font-brandFont"
         className={`${
           showSidebar ? "max-w-[90%]" : "max-w-[70%]"
-        } flex flex-col space-y-4 p-3 font-brandFont mx-auto `}
+        } flex flex-col space-y-4 p-3 font-brandFont mx-auto`}
       >
-        <h1 className="bg-white text-3xl text-brand-primary italic border-b-2 border-b-gray-300 font-semibold">
-          Restaurants
-        </h1>
-        {Restaurants?.length > 0 &&
-          Restaurants.map((card, ind) => {
+        <div className="flex items-center justify-between border-b-2 border-b-gray-300 py-2">
+          <h1 className="bg-white text-3xl text-brand-primary italic font-semibold">
+            Restaurants
+          </h1>
+          <button
+            className="btn-primary font-bold"
+            onClick={() => {
+              dispatch(modalActions.toggleModal("showFilters"));
+            }}
+          >
+            Filters
+          </button>
+        </div>
+        {TempRestaurants?.length > 0 &&
+          TempRestaurants.map((card, ind) => {
             return (
               <div
                 onClick={() => {
@@ -105,10 +182,10 @@ const Restaurants = () => {
                       <div className="flex flex-col space-y-6 p-2 w-1/4">
                         <div className="text-green-400 flex items-center space-x-2 font-bold text-xl">
                           <MdAccessTimeFilled className="font-bold text-2xl" />
-                          <span>{28 + Math.round(Math.random() * 20)} min</span>
+                          <span>{card.deliveryTime} min</span>
                         </div>
                         <div className="rounded-lg bg-green-500 text-white px-2 py-1 flex items-center space-x-1 w-fit">
-                          <span>{Math.round(4 + Math.random())}</span>
+                          <span>{card.ratings}</span>
                           <FaStar />
                         </div>
                       </div>
@@ -147,10 +224,112 @@ const Restaurants = () => {
               </div>
             );
           })}
-        {Restaurants.length == 0 && (
+        {TempRestaurants.length == 0 && (
           <h1 className="text-3xl text-gray-400 font-semibold">
             Oops......No restaurants found
           </h1>
+        )}
+        {showModal === "showFilters" && (
+          <Modal modalWidth="w-1/2">
+            <h1 className="text-xl text-brand-third border-b-2 border-b-brand-third">
+              Filters
+            </h1>
+            <div className="flex space-x-2 p-2 h-96 mb-2">
+              <ul className="flex flex-col space-y-2 border-r-2 border-brand-third p-2 w-1/4 h-full">
+                <li
+                  className="text-start p-2 hover:rounded-xl hover:bg-brand-third hover:text-brand-primary cursor-pointer"
+                  onClick={() => {
+                    setFilterBy(0);
+                  }}
+                >
+                  Sort By
+                </li>
+                <li
+                  className="text-start p-2 hover:rounded-xl hover:bg-brand-third hover:text-brand-primary cursor-pointer"
+                  onClick={() => {
+                    setFilterBy(1);
+                  }}
+                >
+                  Cuisines
+                </li>
+              </ul>
+              <div className="w-3/4 py-4">
+                {filterBy == 0 && (
+                  <ul className="w-full">
+                    {sortByOptions.map((option, ind) => {
+                      return (
+                        <li className="flex items-center mb-4" key={ind}>
+                          <label className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 flex items-center space-x-3">
+                            <input
+                              id="sortBy"
+                              type="radio"
+                              name="sortBy"
+                              value={option}
+                              className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600 outline-none"
+                              onChange={filterChangeHandler}
+                            />
+                            <span className="text-xl">{option}</span>
+                          </label>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                )}
+                {filterBy == 1 && (
+                  <ul className="w-full overflow-y-scroll max-h-96">
+                    {cuisines.map((cuisine, ind) => {
+                      return (
+                        <label
+                          className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300 flex items-center space-x-3"
+                          key={ind}
+                        >
+                          <input
+                            type="checkbox"
+                            name="cuisines"
+                            id="cuisines"
+                            checked={filters.cuisines.includes(cuisine)}
+                            value={cuisine}
+                            onChange={(e) => {
+                              if (filters.cuisines.includes(e.target.value)) {
+                                setFilters((prev) => {
+                                  return {
+                                    ...prev,
+                                    [prev.cuisines]: prev.cuisines.filter(
+                                      (prevCuisine) =>
+                                        prevCuisine != e.target.value
+                                    ),
+                                  };
+                                });
+                              } else {
+                                setFilters((prev) => {
+                                  return {
+                                    ...prev,
+                                    [e.target.name]: [
+                                      ...prev.cuisines,
+                                      e.target.value,
+                                    ],
+                                  };
+                                });
+                              }
+                            }}
+                          />
+                          <span className="text-xl">{cuisine}</span>
+                        </label>
+                      );
+                    })}
+                  </ul>
+                )}
+              </div>
+            </div>
+            <div className="flex items-center justify-end space-x-3">
+              <button className="btn-secondary" onClick={onClearFitlers}>
+                Clear Filters
+              </button>
+              <button className="btn-primary" onClick={onApplyFilters}>
+                Apply Filters
+              </button>
+            </div>
+          </Modal>
         )}
       </motion.div>
     </>

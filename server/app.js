@@ -5,6 +5,9 @@ const mongoose = require("mongoose");
 require("dotenv").config({
   path: "./.env",
 });
+if (process.env.NODE_ENV != "developemt") {
+  console.log = () => {};
+}
 
 //3rd party package requirements
 const bodyParser = require("body-parser");
@@ -46,6 +49,7 @@ mongoose
   .then((res) => {
     app.listen(process.env.SERVER_PORT, () => {
       console.log("server started");
+      console.log(process.env.NODE_ENV);
     });
   })
   .catch((err) => {

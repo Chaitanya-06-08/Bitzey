@@ -79,11 +79,11 @@ const RestaurantPage = () => {
             } flex flex-col font-brandFont px-4 py-6 space-y-3 mx-auto max-w-[90%]`}
           >
             <div className="flex space-x-20 h-2/3 px-6 py-10 border-2 border-gray-300 shadow-lg rounded-2xl">
-              <div className="w-[28rem] h-full ml-2">
+              <div className="w-1/2 h-96 ">
                 <img
                   src={restaurant?.image?.imageUrl}
                   alt=""
-                  className="object-cover w-full h-full rounded-xl"
+                  className="object-contain w-full h-full rounded-xl"
                 />
               </div>
               <div className="w-1/2 h-36 flex flex-col space-y-6 py-2">

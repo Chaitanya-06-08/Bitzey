@@ -522,7 +522,7 @@ const RestaurantSignup = () => {
                       id="openminute"
                       value={signupDetails.opentime.openminute}
                       min={0}
-                      max={23}
+                      max={59}
                       placeholder="min"
                       className="h-full w-fit bg-white py-2 text-brand-primary px-4 rounded-md focus:outline-none"
                       onChange={(e) => {
@@ -575,7 +575,7 @@ const RestaurantSignup = () => {
                       id="closeminute"
                       value={signupDetails.closetime.closeminute}
                       min={0}
-                      max={23}
+                      max={59}
                       placeholder="min"
                       className="h-full w-fit bg-white py-2 text-brand-primary px-4 rounded-md focus:outline-none"
                       onChange={(e) => {

@@ -11,7 +11,7 @@ module.exports.customerLogin = async (req, res) => {
   let { email, password, usertype } = req.body;
   if (checkForEmpty([email, password])) {
     return res.status(422).json({ message: "All details should be filled" });
-  }
+  } 
   try {
     let user = await User.findOne({
       $and: [{ email }, { usertype }],
