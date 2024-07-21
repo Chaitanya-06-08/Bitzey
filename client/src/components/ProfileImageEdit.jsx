@@ -29,6 +29,7 @@ const ProfileImageEdit = () => {
         headers: {
           "Content-Type": "multipart/form-data",
         },
+        withCredentials: true,
       });
       // console.log(response);
       await axios.post(
@@ -64,9 +65,13 @@ const ProfileImageEdit = () => {
   const deleteImage = async () => {
     dispatch(loadingActions.toggleLoading());
     try {
-      const response = await axios.post("/api/deleteImageFromCloudinary", {
-        public_id: profileImage.public_id,
-      });
+      const response = await axios.post(
+        "/api/deleteImageFromCloudinary",
+        {
+          public_id: profileImage.public_id,
+        },
+        { withCredentials: true }
+      );
       // console.log(response);
       await axios.post(
         "/api/removeUserProfileImage",

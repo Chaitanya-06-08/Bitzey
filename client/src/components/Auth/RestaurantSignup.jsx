@@ -117,27 +117,31 @@ const RestaurantSignup = () => {
           signupDetails.closetime.closehour,
           signupDetails.closetime.closeminute
         );
-        const response = await axios.post("/api/restaurantSignup", {
-          user: {
-            username: signupDetails.username,
-            email: signupDetails.email,
-            password: signupDetails.password,
-            usertype: "restaurant",
+        const response = await axios.post(
+          "/api/restaurantSignup",
+          {
+            user: {
+              username: signupDetails.username,
+              email: signupDetails.email,
+              password: signupDetails.password,
+              usertype: "restaurant",
+            },
+            name: signupDetails.restaurantName,
+            image: {
+              imageUrl: signupDetails.restaurantImage,
+              public_id: signupDetails.public_id,
+            },
+            location: {
+              address: signupDetails.address,
+              city: signupDetails.city,
+              state: signupDetails.state,
+            },
+            cuisines: signupDetails.cuisines,
+            opentime: opentimedate,
+            closetime: closetimedate,
           },
-          name: signupDetails.restaurantName,
-          image: {
-            imageUrl: signupDetails.restaurantImage,
-            public_id: signupDetails.public_id,
-          },
-          location: {
-            address: signupDetails.address,
-            city: signupDetails.city,
-            state: signupDetails.state,
-          },
-          cuisines: signupDetails.cuisines,
-          opentime: opentimedate,
-          closetime: closetimedate,
-        });
+          { withCredentials: true }
+        );
         console.log(response);
         if (response.status == 200) {
           toast.success(response.data.message);
@@ -174,6 +178,7 @@ const RestaurantSignup = () => {
         headers: {
           "Content-Type": "multipart/form-data",
         },
+        withCredentials: true,
       });
       console.log(response);
       setSignupDetails((prev) => {
@@ -193,9 +198,13 @@ const RestaurantSignup = () => {
   const deleteImage = async () => {
     dispatch(loadingActions.toggleLoading());
     try {
-      const response = await axios.post("/api/deleteImageFromCloudinary", {
-        public_id: signupDetails.public_id,
-      });
+      const response = await axios.post(
+        "/api/deleteImageFromCloudinary",
+        {
+          public_id: signupDetails.public_id,
+        },
+        { withCredentials: true }
+      );
       console.log(response);
       if (response.status == 200) {
         setSignupDetails((prev) => {

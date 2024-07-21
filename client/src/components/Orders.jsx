@@ -69,7 +69,11 @@ const Orders = () => {
   };
   const cancelOrder = async (_id) => {
     try {
-      let response = await axios.post(`/api/cancelOrder`, { _id });
+      let response = await axios.post(
+        `/api/cancelOrder`,
+        { _id },
+        { withCredentials: true }
+      );
       console.log(response.data);
       await getOrders();
     } catch (error) {

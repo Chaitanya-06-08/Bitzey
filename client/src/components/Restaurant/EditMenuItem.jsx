@@ -97,6 +97,7 @@ const AddMenuItem = ({ item, setItem }) => {
         headers: {
           "Content-Type": "multipart/form-data",
         },
+        withCredentials: true,
       });
       console.log(response);
       setItem((prev) => {
@@ -116,9 +117,13 @@ const AddMenuItem = ({ item, setItem }) => {
   const deleteImage = async () => {
     dispatch(loadingActions.toggleLoading());
     try {
-      const response = await axios.post("/api/deleteImageFromCloudinary", {
-        public_id: item.public_id,
-      });
+      const response = await axios.post(
+        "/api/deleteImageFromCloudinary",
+        {
+          public_id: item.public_id,
+        },
+        { withCredentials: true }
+      );
       console.log(response);
       if (response.status == 200) {
         setItem((prev) => {

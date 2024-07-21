@@ -43,10 +43,14 @@ const ConfirmOrder = () => {
     console.log(key);
     const {
       data: { order },
-    } = await axios.post("/api/createPaymentOrder", {
-      amount,
-      currency: "INR",
-    });
+    } = await axios.post(
+      "/api/createPaymentOrder",
+      {
+        amount,
+        currency: "INR",
+      },
+      { withCredentials: true }
+    );
     console.log(order.id);
     var options = {
       key: key,

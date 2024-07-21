@@ -28,13 +28,17 @@ const Signup = () => {
   const signup = async ({ username, email, password, confirmPassword }) => {
     dispatch(loadingActions.toggleLoading());
     try {
-      const response = await axios.post("/api/signup/customer", {
-        username,
-        email,
-        password,
-        confirmPassword,
-        usertype: "customer",
-      });
+      const response = await axios.post(
+        "/api/signup/customer",
+        {
+          username,
+          email,
+          password,
+          confirmPassword,
+          usertype: "customer",
+        },
+        { withCredentials: true }
+      );
       console.log(response);
       if (response.status == 200) {
         toast.success(response.data.message, { duration: 4000 });

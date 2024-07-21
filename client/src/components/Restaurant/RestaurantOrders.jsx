@@ -65,7 +65,9 @@ const RestaurantOrders = () => {
   };
   const cancelOrder = async (_id) => {
     try {
-      let response = await axios.post(`/api/cancelOrder?_id=${_id}`);
+      let response = await axios.post(`/api/cancelOrder?_id=${_id}`, {
+        withCredentials: true,
+      });
       console.log(response.data);
       await getOrders();
     } catch (error) {
@@ -85,10 +87,14 @@ const RestaurantOrders = () => {
   };
   const updateOrderStatus = async (status, _id) => {
     try {
-      let response = await axios.post(`/api/updateOrderStatus`, {
-        _id,
-        status: status.toLowerCase(),
-      });
+      let response = await axios.post(
+        `/api/updateOrderStatus`,
+        {
+          _id,
+          status: status.toLowerCase(),
+        },
+        { withCredentials: true }
+      );
       console.log(response.data);
       await getOrders();
     } catch (error) {

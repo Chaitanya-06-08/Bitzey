@@ -44,11 +44,15 @@ const Login = () => {
       // console.log(loginDetails);
       dispatch(loadingActions.toggleLoading());
       try {
-        let response = await axios.post(`/api/login/${loginType}`, {
-          email: loginDetails.email,
-          password: loginDetails.password,
-          usertype: loginType,
-        });
+        let response = await axios.post(
+          `/api/login/${loginType}`,
+          {
+            email: loginDetails.email,
+            password: loginDetails.password,
+            usertype: loginType,
+          },
+          { withCredentials: true }
+        );
         // console.log("Login IN:\n");
         // console.log(response.data);
         if (response.status == 200) {
