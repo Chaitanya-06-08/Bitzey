@@ -35,4 +35,9 @@ The following image represents the database schema design for Bitzey:
 
 ![Database Schema](https://github.com/Chaitanya-06-08/Bitzey/blob/main/server/public/Bitzey_DB_Schema.png)
 
+## Furthur development :
+
+- Include reviews feature that enables a user to submit feedback for a particular restaurant.
+- Integrate a user friendly chat bot that helps the customer to easily browse restaurants, menu and enables he/she to place order with a prompt.
+  
 *Note: This project is a work in progress.*
