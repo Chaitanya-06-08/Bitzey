@@ -27,6 +27,7 @@ import Favourites from "./pages/Favourites";
 import RestaurantOrders from "./components/Restaurant/RestaurantOrders";
 import Profile from "./components/Profile";
 import PaymentStatus from "./components/PaymentStatus";
+import AboutUs from "./pages/AboutUs";
 function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
@@ -34,6 +35,7 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />}></Route>
           <Route path="restaurants" element={<Restaurants />}></Route>
+          <Route path="aboutus" element={<AboutUs />}></Route>
           <Route path="restaurantPage/:_id/" element={<RestaurantPage />}>
             <Route path="menu" element={<RestaurantMenu />}></Route>
             <Route path="reviews"></Route>
