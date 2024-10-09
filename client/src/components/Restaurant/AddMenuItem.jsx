@@ -15,6 +15,7 @@ const AddMenuItem = () => {
   const dispatch = useDispatch();
   const Categories = [
     "Starters",
+    "Breakfast",
     "Biryani",
     "Fast Food",
     "Sweets",
